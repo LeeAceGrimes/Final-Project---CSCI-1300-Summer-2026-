@@ -23,11 +23,10 @@ class Character {
         //setters/methods
         Character(string n, int lvl);
 
-        string setName();
-        int setHealth();
-        int setAttack();
-        int setcritChance();
-        string setInfo(); // may not use but have available.
+        string setName(string newName);
+        int setHealth(int newHealth);
+        int setAttack(int newAttack);
+        string setInfo(string newInfo); // may not use but have available.
 
 
         //getters

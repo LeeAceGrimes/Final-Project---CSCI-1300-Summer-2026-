@@ -2,6 +2,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "Character.h"
+
 
 #include <string>
 #include <vector>
@@ -9,7 +11,7 @@
 using namespace std;
 
 
-class Player {
+class Player : public Character {
     private:
         int gold;
         int sanity;
@@ -26,10 +28,10 @@ class Player {
         }
 
         //setters
-        int setGold();
-        int setSanity();
-        int moveLocation();
-        int setCrit();
+        int setGold(int newGold); // place temporary value in setter to replace the private value with
+        int setSanity(int newSanity);
+        int moveLocation(int newLocation);
+        int setCrit(int newCritChance);
 
         //getters
         int getGold();
