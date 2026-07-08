@@ -8,26 +8,34 @@
 
 using namespace std;
 
+class Character {
+    private: // name, levle, health, attack, critchance??, character info for checkpoint 2
+        string name;
+        int level;
+        int health;
+        int attack;
+        //int critChance; mobs can no longer crit, exclusive to player
+        string info;
+        //creature type?
+        // int defense; ??
+
+    public:
+        //setters/methods
+        Character(string n, int lvl);
+
+        string setName();
+        int setHealth();
+        int setAttack();
+        int setcritChance();
+        string setInfo(); // may not use but have available.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        //getters
+        string getName();
+        int getHealth();
+        int getAttack();
+        string getInfo();
+};
 
 
 #endif
