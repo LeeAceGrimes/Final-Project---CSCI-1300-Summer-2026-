@@ -42,8 +42,8 @@ class Game {
 
     //add combat systems here as well as additional game mechanics
     //getters
-    int getDay();
-    int getTime();
-    bool getRunning();
+    int getDay(); //get day
+    int getTime(); //get time
+    bool getRunning(); //get running confirmation
 };
 #endif
