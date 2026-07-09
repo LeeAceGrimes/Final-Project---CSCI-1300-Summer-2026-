@@ -28,7 +28,7 @@ class Game {
     public:
 
     //constructor
-    Game(int d, int t, bool r, int currentLocationIndex);
+    Game(int newDay, int newTime, bool newRunning, int newCurrentLocationIndex);
 
     //prototype functions for game commands
     void startGame(); // start game method

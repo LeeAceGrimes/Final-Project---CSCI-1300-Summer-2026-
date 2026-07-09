@@ -16,18 +16,19 @@ class Enemy : public Character {
         int sanityDamStat;
         int loot; // maybe add additional loot detail for strings??
         bool defeated;
-        //location?
+        int enemyLocationIndex; //location ADDED! This will let me define where the mob is like player
 
 
     public:
         //constructor
-        Enemy(int d, int sD, int L);
+        Enemy(int d, int sD, int L, int locationIndex);
 
         //setters
         void setDam(int newDamStat); // set damage
         void setSanityDam(int newSanityDamStat); // set sanity damage
         void setLoot(int newLoot); //set loot
         void setIsDefeated(bool newIsDefeated); //set defeated status
+        void setEnemyLocationIndex(int newEnemyLocationIndex); // set enemy location index
 
         //getters
         int getDam(); // get damage
@@ -35,5 +36,6 @@ class Enemy : public Character {
         int getLoot(); // get loot
         bool getIsDefeated(); // get defeated status
         void displayEnemy();
+        int getEnemyLocationIndex(); // added getter - enemy location index
 };
 #endif
