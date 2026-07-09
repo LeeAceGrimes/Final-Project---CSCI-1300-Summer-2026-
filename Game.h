@@ -17,57 +17,33 @@ using namespace std;
 
 class Game {
     private: // private variables
+        Player player; // create one object from player class - EXISTS
+        vector<Area> areas; //create a vector of locations starting with one location - EXISTS
+        vector<Enemy> enemies; // create a vector of enemies starting with 1 enemy - EXISTS
+        int currentPosition;  // game index for area locations, have 2 similar variables in Area.h maybe problem??????
         int day;
         int time;
         bool running; //control variable for overall sample game loop
-        Player player; // create one object from player class - EXISTS
-        vector<Area> location; //create a vector of locations starting with one location - EXISTS
-        vector<Enemy> enemy; // create a vector of enemies starting with 1 enemy - EXISTS
-        int currentAreaI;  // game index for area locations, have 2 similar variables in Area.h maybe problem??????
-
 
     public:
 
     //constructor
     Game(int d, int t, bool r, int currentAI);
 
+    //prototype functions for game commands
+    void startGame(); // start game method
+    void processChoice(); // recieve player input perform action associated
+    void displayDash(); // displays dashboard
+    void displayMenu(); //displays menu maybe combine dash and menu
+    void displayCurrentArea(); // displays current active area
+    void displayEnemies(); // displays enemies in area
+    void travel(); // trave action to move location
+    void endGame(); // ends game
 
-
-    //setters
-    int setDay(int newDay);
-
-    int setTime(int newTime);
-
-    bool setRunning(bool newRunning);
-
-
-
-    //startGame
-    //displayDash
-    //displayMenu
-    //displayCurrentArea
-    //displayEnemies
-    //travel
-    //endGame
-
-
-
-
-
+    //add combat systems here as well as additional game mechanics
     //getters
-
-
-
-
-
-
-
-
-
-
-
-
-
+    int getDay();
+    int getTime();
+    bool getRunning();
 };
-
 #endif

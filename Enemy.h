@@ -12,8 +12,8 @@ using namespace std;
 
 class Enemy : public Character {
     private:
-        int damage; //attack but for enemy, maybe change later if confusing
-        int sanityDam;
+        int damageStat; //attack but for enemy, maybe change later if confusing
+        int sanityDamStat;
         int loot; // maybe add additional loot detail for strings??
         bool defeated;
 
@@ -23,8 +23,8 @@ class Enemy : public Character {
         Enemy(int d, int sD, int L);
 
         //setters
-        int setDam(int newDam); // set damage
-        int setSanityDam(int newSanityDam); // set sanity damage
+        int setDam(int newDamStat); // set damage
+        int setSanityDam(int newSanityDamStat); // set sanity damage
         int setLoot(int newLoot); //set loot
         bool setIsDefeated(bool newIsDefeated); //set defeated status
 

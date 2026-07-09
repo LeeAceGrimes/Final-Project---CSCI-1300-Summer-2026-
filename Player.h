@@ -15,29 +15,25 @@ class Player : public Character {
     private:
         int gold;
         int sanity;
-        int critChance;
+        //int critChance;
         int currentLocation;
         string locationName; //?? need for converting numbered areas to strings
         // int inventoryItems;
 
     public:
-        Player(int g, int s, int cL) { //constructor
-            gold = g;
-            sanity = s;
-            currentLocation = cL;
-        }
+        Player(int g, int s, int cL); //constructor
 
         //setters
-        int setGold(int newGold); // place temporary value in setter to replace the private value with
-        int setSanity(int newSanity);
-        int moveLocation(int newLocation);
-        int setCrit(int newCritChance);
+        void setGold(int newGold); // place temporary value in setter to replace the private value with
+        void setSanity(int newSanity);
+        void moveLocation(int newLocation);
+       // int setCrit(int newCritChance);
 
         //getters
         int getGold();
         int getSanity();
         int getCL();
-        int getPStats();
+        void displayPlayerStats(); // will display health attack and level for now
 };
 
 #endif

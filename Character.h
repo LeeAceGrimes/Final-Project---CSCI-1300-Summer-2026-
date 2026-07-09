@@ -11,29 +11,31 @@ using namespace std;
 class Character {
     private: // name, levle, health, attack, critchance??, character info for checkpoint 2
         string name;
-        int level;
-        int health;
-        int attack;
+        int levelStat;
+        int healthStat;
+        int attackStat;
         //int critChance; mobs can no longer crit, exclusive to player
         string info;
         //creature type?
         // int defense; ??
 
     public:
-        //setters/methods
-        Character(string n, int lvl);
+        //setters/methods - set setters to void as they return nothing
+        Character(string n, int lvl); // for other parameters set to default in .cpp file
 
-        string setName(string newName);
-        int setHealth(int newHealth);
-        int setAttack(int newAttack);
-        string setInfo(string newInfo); // may not use but have available.
+        void setName(string newName);
+        void setHealth(int newHealthStat);
+        void setAttack(int newAttackStat);
+        void setInfo(string newInfo); // may not use but have available.
+        void setLevelStat(int newLevelStat);
 
 
-        //getters
+        //getters - getters return values do not make void
         string getName();
         int getHealth();
         int getAttack();
         string getInfo();
+        int getLevelStat();
 };
 
 
