@@ -48,14 +48,14 @@ Game::Game(int newDay, int newTime, bool newRunning, int newCurrentLocationIndex
 void Game::startGame() { // start game method
     while(running == true) {
         displayMenu();
-        processChoice();
+        processMenuChoice();
     }
 }
 
-void Game::processChoice(){ // recieve player input perform action associated
+void Game::processMenuChoice(){ // recieve player input perform action associated
     int choice;
     if(choice == 1) {
-        //start game
+        displayMenu()
     }
     if(choice == 2) {
         //show instructions
@@ -71,6 +71,10 @@ void Game::processChoice(){ // recieve player input perform action associated
 void Game::displayDash() { // displays dashboard
 
 
+}
+
+void Game::processDashChoice() {
+    
 }
 
 void Game::displayMenu() { //display menu formatting

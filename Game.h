@@ -32,7 +32,8 @@ class Game {
 
     //prototype functions for game commands
     void startGame(); // start game method
-    void processChoice(); // recieve player input perform action associated
+    void processMenuChoice(); // recieve player input perform action associated // adjusted for two choices one for title screen menu and the other for user actions/dash
+    void processDashChoice(); // recieve player dash choice
     void displayDash(); // displays dashboard
     void displayMenu(); //displays menu maybe combine dash and menu
     void displayCurrentArea(); // displays current active area
