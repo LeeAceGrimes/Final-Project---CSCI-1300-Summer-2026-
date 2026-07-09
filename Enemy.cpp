@@ -13,6 +13,9 @@ Enemy::Enemy(int d, int sD, int L) // contructor similar to player but with enem
     damageStat = d;
     sanityDamStat = sD;
     loot = L;
+
+    defeated = false; //initialize defeated value to false by default (character exists)
+
 }
 
 //setters - Don't need to rewrite the same functions if inherited from one class to another
@@ -47,4 +50,15 @@ int Enemy::getLoot() {
 
 bool Enemy::getIsDefeated() {
     return defeated;
+}
+
+void Enemy::displayEnemy() { //similar to displayPlayerStats but for enemy
+    cout << "Name: " << getName() << endl; //inherited from character class
+    cout << "Info: " << getInfo() << endl; //inherited from character class
+    cout << "Level: " << getLevelStat() << endl; //inherited from character class
+    cout << "Health: " << getHealth() << endl; //inherited from character class
+    cout << "Attack: " << getDam() << endl;
+    cout << "Sanity Attack: " << getSanityDam() << endl;
+    cout << "Loot: " << getLoot() << endl;
+    cout << "Status: " << getIsDefeated() << endl;
 }

@@ -34,5 +34,6 @@ class Enemy : public Character {
         int getSanityDam(); //get sanity damage
         int getLoot(); // get loot
         bool getIsDefeated(); // get defeated status
+        void displayEnemy();
 };
 #endif

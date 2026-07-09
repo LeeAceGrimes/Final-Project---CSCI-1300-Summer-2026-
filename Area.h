@@ -17,18 +17,20 @@ class Area {
 
     public:
         //contructor
-        Area(int locPOS, string locName);
+        Area(int newCurrentLocationIndex, string newLocationName);
+
         //setters
-        int setLocationPOS(int newCurrentLocationIndex); // set location integer
-        string setLocationName(string setLocationName); // set location string name
-        string setAreaDescription(string newAreaDescription); // set area description
-        bool setAreaUnlocked(bool newAreaUnlocked); // set area lock/unlock
+        void setLocationIndex(int newCurrentLocationIndex); // set location integer
+        void setLocationName(string newLocationName); // set location string name
+        void setAreaDescription(string newAreaDescription); // set area description
+        void setAreaUnlocked(bool newAreaUnlocked); // set area lock/unlock
 
 
         //getters
-        int getLocationPOS(); // get location integer value
+        int getLocationIndex(); // get location integer value
         string getLocationName(); // get location name based on integer value
         string getAreaDescription(); // get area description
         bool getAreaUnlocked(); // get whether area unlocked or locked still
+        
 };
 #endif
