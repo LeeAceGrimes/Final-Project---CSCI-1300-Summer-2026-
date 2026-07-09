@@ -39,6 +39,4 @@ class Character {
         string getInfo();
         int getLevelStat();
 };
-
-
 #endif

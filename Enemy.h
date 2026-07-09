@@ -24,14 +24,14 @@ class Enemy : public Character {
         Enemy(int d, int sD, int L);
 
         //setters
-        int setDam(int newDamStat); // set damage
-        int setSanityDam(int newSanityDamStat); // set sanity damage
-        int setLoot(int newLoot); //set loot
-        bool setIsDefeated(bool newIsDefeated); //set defeated status
+        void setDam(int newDamStat); // set damage
+        void setSanityDam(int newSanityDamStat); // set sanity damage
+        void setLoot(int newLoot); //set loot
+        void setIsDefeated(bool newIsDefeated); //set defeated status
 
         //getters
         int getDam(); // get damage
-        int getsanityDam(); //get sanity damage
+        int getSanityDam(); //get sanity damage
         int getLoot(); // get loot
         bool getIsDefeated(); // get defeated status
 };
