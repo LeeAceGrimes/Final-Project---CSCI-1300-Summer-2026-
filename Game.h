@@ -20,7 +20,7 @@ class Game {
         Player player; // create one object from player class - EXISTS
         vector<Area> areas; //create a vector of locations starting with one location - EXISTS
         vector<Enemy> enemies; // create a vector of enemies starting with 1 enemy - EXISTS
-        int currentPosition;  // game index for area locations, have 2 similar variables in Area.h maybe problem??????
+        int currentLocationIndex;  // game index for area locations, have 2 similar variables in Area.h maybe problem??????
         int day;
         int time;
         bool running; //control variable for overall sample game loop
@@ -28,7 +28,7 @@ class Game {
     public:
 
     //constructor
-    Game(int d, int t, bool r, int currentAI);
+    Game(int d, int t, bool r, int currentLI);
 
     //prototype functions for game commands
     void startGame(); // start game method

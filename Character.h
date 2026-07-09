@@ -15,13 +15,15 @@ class Character {
         int healthStat;
         int attackStat;
         //int critChance; mobs can no longer crit, exclusive to player
-        string info;
+        string information;
         //creature type?
         // int defense; ??
+        //gainxp
+        //levelup
 
     public:
         //setters/methods - set setters to void as they return nothing
-        Character(string n, int lvl); // for other parameters set to default in .cpp file
+        Character(string newName, string newInfo); // for other parameters set to default in .cpp file
 
         void setName(string newName);
         void setHealth(int newHealthStat);

@@ -16,6 +16,7 @@ class Enemy : public Character {
         int sanityDamStat;
         int loot; // maybe add additional loot detail for strings??
         bool defeated;
+        //location?
 
 
     public:

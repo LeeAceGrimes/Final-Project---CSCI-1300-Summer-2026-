@@ -10,7 +10,7 @@ using namespace std;
 
 class Area {
     private:
-        int locationPOS; // integer map location
+        int currentLocationIndex; // integer map location
         string locationName; // location name
         string areaDescription; // brief description / flavor text
         bool areaUnlocked; // is area unlocked
@@ -19,7 +19,7 @@ class Area {
         //contructor
         Area(int locPOS, string locName);
         //setters
-        int setLocationPOS(int newLocationPOS); // set location position integer
+        int setLocationPOS(int newCurrentLocationIndex); // set location integer
         string setLocationName(string setLocationName); // set location string name
         string setAreaDescription(string newAreaDescription); // set area description
         bool setAreaUnlocked(bool newAreaUnlocked); // set area lock/unlock
