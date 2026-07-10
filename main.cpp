@@ -27,3 +27,8 @@ int main() {
 //npcs
 //quest system
 //leveling system
+
+//Total Compilation
+// add newline in after each text block for better visibility --- FIXED
+// total enemies in area formatting ---- FIXED
+// areas available output ---- FIXED

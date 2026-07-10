@@ -61,6 +61,7 @@ int Enemy::getEnemyLocationIndex() { //get enemy location
 }
 
 void Enemy::displayEnemy() { //similar to displayPlayerStats but for enemy
+    cout << endl; //extra space for output formatting
     cout << "Name: " << getName() << endl; //inherited from character class
     cout << "Info: " << getInfo() << endl; //inherited from character class
     cout << "Level: " << getLevelStat() << endl; //inherited from character class

@@ -25,12 +25,10 @@ class Area {
         void setAreaDescription(string newAreaDescription); // set area description
         void setAreaUnlocked(bool newAreaUnlocked); // set area lock/unlock
 
-
         //getters
         int getLocationIndex(); // get location integer value
         string getLocationName(); // get location name based on integer value
         string getAreaDescription(); // get area description
-        bool getAreaUnlocked(); // get whether area unlocked or locked still
-        
+        bool getAreaUnlocked(); // get whether area unlocked or locked still       
 };
 #endif

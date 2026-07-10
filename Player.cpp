@@ -44,6 +44,7 @@ int Player::getCL() {
 }
 
 void Player::displayPlayerStats() { //display stats player inherits all getter/setter functions available to Character
+    cout << endl; //extra line for better formatting
     cout << "Name: " << getName() << endl; //pure get name, no notation needed
     cout << "Info: " << getInfo() << endl;
     cout << "Level: " << getLevelStat() << endl;

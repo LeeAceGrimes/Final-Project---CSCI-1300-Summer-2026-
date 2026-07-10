@@ -58,6 +58,7 @@ void Game::startGame() { // start game method
 }
 
 void Game::displayMenu() { // display menu formatting - purely text
+    cout << endl; //add space for better formatting between output
     cout << "------------------------------" << endl;
     cout << "          Main Menu           " << endl;
     cout << "------------------------------" << endl;
@@ -90,6 +91,7 @@ void Game::processMenuChoice(){ // recieve player input perform action associate
 }
 
 void Game::displayDash() { // displays dashboard ---- add additional functions such as companion and combat for user here!
+    cout << endl;
     cout << "------------------------------" << endl;
     cout << "          Dashboard           " << endl;
     cout << "------------------------------" << endl;
@@ -134,7 +136,7 @@ void Game::processDashChoice() { // process dash choices for player!
 void Game::travel() { // travel action to move location
     int newLocation = 0;
     for(size_t i = 0; i < areas.size(); i++) { // reformat for better visual?????????? //didn't intitialize i
-        cout << areas[i].getLocationIndex() << ". " << areas[i].getLocationName(); // No i + 1 needed since using 0, probably the best decision made so far
+        cout << areas[i].getLocationIndex() << ". " << areas[i].getLocationName() << " " << endl; // No i + 1 needed since using 0, probably the best decision made so far
     }
 
     cout << "Select Travel Destination: ";
@@ -161,6 +163,7 @@ void Game::travel() { // travel action to move location
 } //bracket confusion oin fgoqewrngvqowE'AIRSFNGVqwao'srgvfnm !!!!!!!!!!!!!
 
 void Game::displayCurrentArea() { // displays current active area
+    cout << endl;
     cout << "Current Area Index: " << areas[currentLocationIndex].getLocationIndex() << endl;  //access areas vector at current location index, print 
     cout << "Current Area Name: " << areas[currentLocationIndex].getLocationName() << endl; // cout location name
     cout << "Description: " << areas[currentLocationIndex].getAreaDescription() << endl; // area description
@@ -175,7 +178,7 @@ void Game::displayEnemies() { // displays total enemies in area
         }
     }
     if(enemyCount > 0){
-        cout << "There are " << enemyCount << "in this Area." << endl; // cout total enemy count nearby for user if enemy count > 0
+        cout << "There are " << enemyCount << " Enemies in this Area." << endl; // cout total enemy count nearby for user if enemy count > 0
     }
     else {
         cout << "No Enemies in this area." << endl; // default is 0 enemies nearby
