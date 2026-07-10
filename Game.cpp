@@ -20,17 +20,22 @@ Game::Game(int newDay, int newTime, bool newRunning, int newCurrentLocationIndex
         running = newRunning; //set running
         currentLocationIndex = newCurrentLocationIndex; //set local location index
 
-        //add area object to area vector
+        //add area object to area vector // did not push description into each location. !!!!!!!!!!!!!!!! FIXED
         areas.push_back(Area(0, "Guild Hall")); // 0 = Guild Hall
+        areas[0].setAreaDescription("The Hall of Conquest, the most prominent Guild Hall in the region, a mere shell of it's former Glory. Now willing to offer jobs to even the craziest of Adventurers.");
         areas[0].setAreaUnlocked(true); // STARTING ZONE (set to unlock for demo purposes)
 
         areas.push_back(Area(1, "Whispered Forest")); // 1 = Forest
+        areas[1].setAreaDescription("A Large Forest seemingly ordinary on the outside, however rumors tell of a constant whispering near dusk. The area has since been overwhelmed by monsters.");
         areas[1].setAreaUnlocked(true); //set to unlocked for demo purposes
 
         areas.push_back(Area(2, "Underbelly")); // 2 = underbelly
+        areas[2].setAreaDescription("The deep Underbelly of the local town. Recent monster attacks have driven most criminal organizations underground. What can be found?");
         areas[2].setAreaUnlocked(true); //set to unlocked for demo purposes
 
         areas.push_back(Area(3, "Porcelain Fortress")); // 3 = fortress
+        areas[3].setAreaDescription("A magnificent fortress that once radiated glory across the region. Since then the shine has become quite dull, what happened at the Fortress?");
+        areas[3].setAreaUnlocked(true); // set to unlocked for 
 
         //add enemy object to enemy vector
         enemies.push_back(Enemy(3, 2, 8, 1));
@@ -41,7 +46,7 @@ Game::Game(int newDay, int newTime, bool newRunning, int newCurrentLocationIndex
         enemies.push_back(Enemy(5, 2, 15, 2));
         enemies.push_back(Enemy(5, 2, 15, 2)); // x3 normal mobs
 
-        enemies.push_back(Enemy(10, 5, 100, 2)); // mini-boss
+        enemies.push_back(Enemy(10, 5, 100, 3)); // mini-boss
 }
 
 //setters
@@ -68,8 +73,10 @@ void Game::processMenuChoice(){ // recieve player input perform action associate
     cin >> menuChoice;
 
     if(menuChoice == 1) { //start game upon selecting option 1 // maybe loop while running true????????
+        while(running) {
         displayDash(); //display dashboard
         processDashChoice(); // prompt user for input
+        }
     }
     else if(menuChoice == 2) { //place holder Instructions -- if all three are if statements they are independent if followed by else if is interconnected
         cout << "Terminal text adventure game, respond to the on-screen prompts and select your action via the respective integer!" << endl;
@@ -126,29 +133,32 @@ void Game::processDashChoice() { // process dash choices for player!
 
 void Game::travel() { // travel action to move location
     int newLocation = 0;
-    for(size_t i; i < areas.size(); i++) { // reformat for better visual??????????
+    for(size_t i = 0; i < areas.size(); i++) { // reformat for better visual?????????? //didn't intitialize i
         cout << areas[i].getLocationIndex() << ". " << areas[i].getLocationName(); // No i + 1 needed since using 0, probably the best decision made so far
-      
-        cout << "Select Travel Destination: ";
-        cin >> newLocation;
+    }
 
-        if(newLocation >= 0 && newLocation < static_cast<int>(areas.size())) { // newlocation will always be greater than 0 & less than VALIDATION
-            if(areas[newLocation].getAreaUnlocked()) { //check unlocked or locked by function
+    cout << "Select Travel Destination: ";
+    cin >> newLocation;
+    
 
-                currentLocationIndex = newLocation;
-                player.moveLocation(newLocation);
+    if(newLocation >= 0 && newLocation < static_cast<int>(areas.size())) { // newlocation will always be greater than 0 & less than VALIDATION //SIZE_T instead of INT here??????? COMPILES!
+        if(areas[newLocation].getAreaUnlocked()) { //check unlocked or locked by function
 
-                cout << "Now arriving at " << areas[currentLocationIndex].getLocationName() << " (" << currentLocationIndex << ")" << endl; // print location name from areas vector object currentLocation index, followed by index
-            }
-            else {
-                cout << "That area is currently locked." << endl;
-            }
+            currentLocationIndex = newLocation;
+            player.moveLocation(newLocation);
+
+            cout << "Now arriving at " << areas[currentLocationIndex].getLocationName() << " (" << currentLocationIndex << ")" << endl; // print location name from areas vector object currentLocation index, followed by index
         }
         else {
-            cout << "That destination does not exist." << endl;
+            cout << "That area is currently locked." << endl;
         }
     }
-}
+
+    else {
+        cout << "That destination does not exist." << endl;
+    }
+    
+} //bracket confusion oin fgoqewrngvqowE'AIRSFNGVqwao'srgvfnm !!!!!!!!!!!!!
 
 void Game::displayCurrentArea() { // displays current active area
     cout << "Current Area Index: " << areas[currentLocationIndex].getLocationIndex() << endl;  //access areas vector at current location index, print 
