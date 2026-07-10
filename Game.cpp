@@ -46,38 +46,13 @@ Game::Game(int newDay, int newTime, bool newRunning, int newCurrentLocationIndex
 
 //setters
 void Game::startGame() { // start game method
-    while(running == true) {
+    while(running == true) { //while program running
         displayMenu();
-        processMenuChoice();
+        processMenuChoice(); 
     }
 }
 
-void Game::processMenuChoice(){ // recieve player input perform action associated
-    int choice;
-    if(choice == 1) {
-        displayMenu()
-    }
-    if(choice == 2) {
-        //show instructions
-    }
-    if(choice == 3) {
-        //terminate program
-    }
-    else{
-        cout << "Invalid Selection, please choose from the availble options." << endl;
-    }
-}
-
-void Game::displayDash() { // displays dashboard
-
-
-}
-
-void Game::processDashChoice() {
-    
-}
-
-void Game::displayMenu() { //display menu formatting
+void Game::displayMenu() { // display menu formatting - purely text
     cout << "------------------------------" << endl;
     cout << "          Main Menu           " << endl;
     cout << "------------------------------" << endl;
@@ -88,12 +63,104 @@ void Game::displayMenu() { //display menu formatting
     cout << "Select an option (1-3): " << endl;
 }
 
-void Game::displayCurrentArea() { // displays current active area
+void Game::processMenuChoice(){ // recieve player input perform action associated
+    int menuChoice = 0;
+    cin >> menuChoice;
 
-
+    if(menuChoice == 1) { //start game upon selecting option 1 // maybe loop while running true????????
+        displayDash(); //display dashboard
+        processDashChoice(); // prompt user for input
+    }
+    else if(menuChoice == 2) { //place holder Instructions -- if all three are if statements they are independent if followed by else if is interconnected
+        cout << "Terminal text adventure game, respond to the on-screen prompts and select your action via the respective integer!" << endl;
+    }
+    else if(menuChoice == 3) {
+        endGame(); // sets running to false - terminates program
+    }
+    else{
+        cout << "Invalid Selection, please choose from the availble options." << endl; // default invalid selection option
+    }
 }
 
-void Game::displayEnemies() { // displays enemies in area
+void Game::displayDash() { // displays dashboard ---- add additional functions such as companion and combat for user here!
+    cout << "------------------------------" << endl;
+    cout << "          Dashboard           " << endl;
+    cout << "------------------------------" << endl;
+    cout << "Day: " << getDay() << endl; //current day
+    cout << "Time: " << getTime() << endl; //current time
+    cout << "Location: " << areas[currentLocationIndex].getLocationName() << " (" << currentLocationIndex << ")" << endl; // player location //replacing with area call for location instead of player?
+    cout << "Gold: " << player.getGold() << endl;
+    cout << "Sanity: " << player.getSanity() << endl;
+    cout << "------------Actions-----------" << endl;
+    cout << "1. Travel" << endl;
+    cout << "2. View Player Information" << endl;
+    cout << "3. Current Area" << endl;
+    cout << "4. View Nearby Enemies" << endl;
+    cout << "5. End Game" << endl; // later save function for reaccess
+    cout << "Select an Option (1-5): " << endl;
+}
+
+void Game::processDashChoice() { // process dash choices for player!
+    int dashChoice = 0;
+    cin >> dashChoice;
+
+    if(dashChoice == 1) {
+        travel(); // travel option for player
+    }
+    else if(dashChoice == 2) {
+        player.displayPlayerStats(); // display player stats using display players stats player function
+    }
+    else if(dashChoice == 3) {
+        displayCurrentArea(); // double back on this
+    }
+    else if(dashChoice == 4) {
+        displayEnemies(); // display enemies
+    }
+    else if(dashChoice == 5) {
+        endGame(); // end game
+    }
+    else {
+       cout << "Invalid Selection, please choose from the availble options." << endl; // default invalid selection option  
+    }
+}
+
+void Game::travel() { // travel action to move location
+    int newLocation = 0;
+    for(size_t i; i < areas.size(); i++) { // reformat for better visual??????????
+        cout << areas
+      
+        cout << "Select Travel Destination: ";
+        cin >> newLocation;
+
+        if(newLocation >= 0 && newLocation < static_cast<int>(areas.size())) { // newlocation will always be greater than 0 & less than VALIDATION
+
+            if(areas[newLocation].getAreaUnlocked()) { //check unlocked or locked by function
+
+                currentLocationIndex = newLocation;
+                player.moveLocation(newLocation);
+
+                cout << "Now arriving at " << areas[currentLocationIndex].getLocationName() << " (" << currentLocationIndex << ")" << endl; // print location name from areas vector object currentLocation index, followed by index
+            }
+            else {
+                cout << "That area is currently locked." << endl;
+            }
+        }
+
+        else {
+            cout << "That destination does not exist." << endl;
+        }
+    }
+}
+
+
+void Game::displayCurrentArea() { // displays current active area
+    cout << "Current Area Index: " << areas[currentLocationIndex].getLocationIndex() << endl;  //access areas vector at current location index, print 
+    cout << "Current Area Name: " << areas[currentLocationIndex].getLocationName() << endl; // cout location name
+    cout << "Description: " << areas[currentLocationIndex].getAreaDescription() << endl; // area description
+}
+
+
+void Game::displayEnemies() { // displays total enemies in area
     int enemyCount = 0; //total nearby enemy count
     for(size_t i = 0; i < enemies.size(); i++) { //scan array
         if(enemies[i].getEnemyLocationIndex() == currentLocationIndex) { //if enemy area matches current location
@@ -109,19 +176,12 @@ void Game::displayEnemies() { // displays enemies in area
     }
 }
 
-
-void Game::travel() { // trave action to move location
-
-}
-
 void Game::endGame() { // ends game
-    running = false;
-
+    running = false; //switch running variable to false.
 }
 
 
 //getters
-
 int Game::getDay() { //get day
     return day;
 }
@@ -133,3 +193,5 @@ int Game::getTime() { //get time
 bool Game::getRunning() { //get running confirmation
     return running;
 }
+
+//include time logic for day and clock cycles

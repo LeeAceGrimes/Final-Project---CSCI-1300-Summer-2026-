@@ -13,7 +13,7 @@ Player::Player(int g, int s, int cL) //constructor
 {
     gold = g; //set private variable to pass by value
     sanity = s;
-    currentLocation = cL;
+    currentLocation = cL; //currently using cl may use currentLocationIndex same as other files.!!!!!!!!!!!!!!!!!!!!!!!
 }
 
 //setters
@@ -51,5 +51,5 @@ void Player::displayPlayerStats() { //display stats player inherits all getter/s
     cout << "Attack: " << getAttack() << endl;
     cout << "Gold: " << getGold() << endl;
     cout << "Sanity: " << getSanity() << endl;
-    cout << "Current Location: " << getCL() << endl;
+    cout << "Current Location: " << getCL() << endl; //replace with area control of position??????
 }

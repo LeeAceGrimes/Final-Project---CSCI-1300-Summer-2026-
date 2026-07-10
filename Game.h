@@ -30,7 +30,7 @@ class Game {
     //constructor
     Game(int newDay, int newTime, bool newRunning, int newCurrentLocationIndex);
 
-    //prototype functions for game commands
+    //prototype functions for game commands some setters some getters REORGANIZE!!
     void startGame(); // start game method
     void processMenuChoice(); // recieve player input perform action associated // adjusted for two choices one for title screen menu and the other for user actions/dash
     void processDashChoice(); // recieve player dash choice

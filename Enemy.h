@@ -17,6 +17,7 @@ class Enemy : public Character {
         int loot; // maybe add additional loot detail for strings??
         bool defeated;
         int enemyLocationIndex; //location ADDED! This will let me define where the mob is like player
+        // add string for location name????
 
 
     public:

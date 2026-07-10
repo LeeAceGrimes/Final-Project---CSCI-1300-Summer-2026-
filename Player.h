@@ -17,7 +17,7 @@ class Player : public Character {
         int sanity;
         //int critChance;
         int currentLocation; // integer value for location
-        string locationName; //?? need for converting numbered areas to strings
+        string locationName; //?? need for converting numbered areas to strings CURRENTLY NOT IN USE
         // int inventoryItems;
 
     public:
