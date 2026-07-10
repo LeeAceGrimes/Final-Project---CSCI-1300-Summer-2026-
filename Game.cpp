@@ -127,13 +127,12 @@ void Game::processDashChoice() { // process dash choices for player!
 void Game::travel() { // travel action to move location
     int newLocation = 0;
     for(size_t i; i < areas.size(); i++) { // reformat for better visual??????????
-        cout << areas
+        cout << areas[i].getLocationIndex() << ". " << areas[i].getLocationName(); // No i + 1 needed since using 0, probably the best decision made so far
       
         cout << "Select Travel Destination: ";
         cin >> newLocation;
 
         if(newLocation >= 0 && newLocation < static_cast<int>(areas.size())) { // newlocation will always be greater than 0 & less than VALIDATION
-
             if(areas[newLocation].getAreaUnlocked()) { //check unlocked or locked by function
 
                 currentLocationIndex = newLocation;
@@ -145,20 +144,17 @@ void Game::travel() { // travel action to move location
                 cout << "That area is currently locked." << endl;
             }
         }
-
         else {
             cout << "That destination does not exist." << endl;
         }
     }
 }
 
-
 void Game::displayCurrentArea() { // displays current active area
     cout << "Current Area Index: " << areas[currentLocationIndex].getLocationIndex() << endl;  //access areas vector at current location index, print 
     cout << "Current Area Name: " << areas[currentLocationIndex].getLocationName() << endl; // cout location name
     cout << "Description: " << areas[currentLocationIndex].getAreaDescription() << endl; // area description
 }
-
 
 void Game::displayEnemies() { // displays total enemies in area
     int enemyCount = 0; //total nearby enemy count
