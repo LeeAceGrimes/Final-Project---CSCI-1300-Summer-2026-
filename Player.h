@@ -24,8 +24,6 @@ class Player : public Character {
     public:
         Player(int g, int s, int cL); //constructor
 
-
-
         //setters
         void setGold(int newGold); // place temporary value in setter to replace the private value with
         void setSanity(int newSanity);
@@ -34,7 +32,7 @@ class Player : public Character {
 
         //player inventory setters
         void addItem(Item newItem);
-
+        bool removeItem(string itemName); // identify item via string confirm it exists then remove from inventory, prevent removing something not obtained
 
 
         //Player getters
@@ -46,7 +44,7 @@ class Player : public Character {
         //Player Inventory getters
         void displayInventory();
         bool hasItem(string itemName);
-        int getInventorySize()
+        int getInventorySize();
 };
 
 #endif

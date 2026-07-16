@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Area.h"
+#include "Item.h"
 
 using namespace std;
 

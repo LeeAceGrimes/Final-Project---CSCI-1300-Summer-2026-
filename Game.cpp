@@ -4,6 +4,7 @@
 #include "Character.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Item.h"
 
 #include <iostream> // included libraries agin just in case, already included in game.h file
 #include <string>
@@ -14,13 +15,15 @@ using namespace std;
 //constructor
 Game::Game(int newDay, int newTime, bool newRunning, int newCurrentLocationIndex) 
     : player(100, 130, 0) { // 100 gold 130 sanity 0 index position is guild hall
+
+        //player.displayInventory(); // Come back to this after fully stretching inventory
     
         day = newDay; //set day
         time = newTime; //set time
         running = newRunning; //set running
         currentLocationIndex = newCurrentLocationIndex; //set local location index
 
-        //add area object to area vector // did not push description into each location. !!!!!!!!!!!!!!!! FIXED
+        //add area object to area vector 
         areas.push_back(Area(0, "Guild Hall")); // 0 = Guild Hall
         areas[0].setAreaDescription("The Hall of Conquest, the most prominent Guild Hall in the region, a mere shell of it's former Glory. Now willing to offer jobs to even the craziest of Adventurers.");
         areas[0].setAreaUnlocked(true); // STARTING ZONE (set to unlock for demo purposes)

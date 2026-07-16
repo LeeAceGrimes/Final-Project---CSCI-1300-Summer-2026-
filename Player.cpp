@@ -28,14 +28,25 @@ void Player::setSanity(int newSanity) { //come back to this mechanic!!!!!!!!!!!!
 void Player::moveLocation(int newLocation) {
     currentLocation = newLocation;
 }
+
+
 //player inventory setter
 void Player::addItem(Item newItem) { // push new item into inventory vector
     inventory.push_back(newItem);
 }
 
+bool Player::removeItem(string itemName) { //probvably serves closer to a getter function, removal and adding are in setters for now. //remove item from vector
+    for(size_t i = 0; i < inventory.size(); i++) {
+        if(inventory[i].getItemName() == itemName) {
+            inventory.erase(inventory.begin() + i); // .erase() function removes item @ index, specific opposite of push_back
+            return true;
+        }
+    }
+    return false;
+}
+
 
 //getters
-
 int Player::getGold() { //getters return private variable values
     return gold;
 }
@@ -86,6 +97,6 @@ bool Player::hasItem(string itemName) { // required item check for story progres
     return false;
 }
 
-int Player::getInventorySize() {
+int Player::getInventorySize() { // inventory size total items
     return static_cast<int>(inventory.size()); // static cast size_t vector to int
 }
