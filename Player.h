@@ -3,6 +3,7 @@
 #define PLAYER_H
 
 #include "Character.h"
+#include "Item.h"
 
 
 #include <string>
@@ -18,22 +19,34 @@ class Player : public Character {
         //int critChance;
         int currentLocation; // integer value for location
         string locationName; //?? need for converting numbered areas to strings CURRENTLY NOT IN USE
-        // int inventoryItems;
+        vector<Item> inventory;
 
     public:
         Player(int g, int s, int cL); //constructor
+
+
 
         //setters
         void setGold(int newGold); // place temporary value in setter to replace the private value with
         void setSanity(int newSanity);
         void moveLocation(int newLocation);
-       // int setCrit(int newCritChance);
+        // int setCrit(int newCritChance);
 
-        //getters
+        //player inventory setters
+        void addItem(Item newItem);
+
+
+
+        //Player getters
         int getGold();
         int getSanity();
         int getCL();
         void displayPlayerStats(); // will display health attack and level for now
+
+        //Player Inventory getters
+        void displayInventory();
+        bool hasItem(string itemName);
+        int getInventorySize()
 };
 
 #endif

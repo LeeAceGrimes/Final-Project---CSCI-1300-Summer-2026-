@@ -21,13 +21,18 @@ void Player::setGold(int newGold) { //exchange old value for new value for follo
     gold = newGold;
 }
 
-void Player::setSanity(int newSanity) {
+void Player::setSanity(int newSanity) { //come back to this mechanic!!!!!!!!!!!!
     sanity = newSanity;
 }
 
 void Player::moveLocation(int newLocation) {
     currentLocation = newLocation;
 }
+//player inventory setter
+void Player::addItem(Item newItem) { // push new item into inventory vector
+    inventory.push_back(newItem);
+}
+
 
 //getters
 
@@ -53,4 +58,34 @@ void Player::displayPlayerStats() { //display stats player inherits all getter/s
     cout << "Gold: " << getGold() << endl;
     cout << "Sanity: " << getSanity() << endl;
     cout << "Current Location: " << getCL() << endl; //replace with area control of position??????
+}
+
+//player inventory getters
+void Player::displayInventory() {
+    if(inventory.size() == 0) { // if index size 0
+        cout << "Inventory is empty." << endl; //empty inventory
+    }
+    else {
+        cout << "----------Inventory----------" << endl; // header
+
+        for(size_t i = 0; i < inventory.size(); i++) {
+            cout << i + 1 << ". "; //numbering each new index
+            cout << "Name: " << inventory[i].getItemName() << endl; // item name
+            cout << "Type: " << inventory[i].getItemType() << endl; // item type
+            cout << "Value: " << inventory[i].getItemValue() << endl; // item value
+        }
+    } 
+}
+
+bool Player::hasItem(string itemName) { // required item check for story progression
+    for(size_t i = 0; i < inventory.size(); i++) { // scan vector
+        if(inventory[i].getItemName() == itemName) { // get name == item name true otherwise false
+            return true;
+        }  
+    }
+    return false;
+}
+
+int Player::getInventorySize() {
+    return static_cast<int>(inventory.size()); // static cast size_t vector to int
 }

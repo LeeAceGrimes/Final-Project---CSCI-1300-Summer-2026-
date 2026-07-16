@@ -202,5 +202,4 @@ int Game::getTime() { //get time
 bool Game::getRunning() { //get running confirmation
     return running;
 }
-
 //include time logic for day and clock cycles
