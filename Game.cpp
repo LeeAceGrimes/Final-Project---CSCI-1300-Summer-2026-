@@ -23,6 +23,19 @@ Game::Game(int newDay, int newTime, bool newRunning, int newCurrentLocationIndex
         running = newRunning; //set running
         currentLocationIndex = newCurrentLocationIndex; //set local location index
 
+        //test quest prog
+        //end test quest prog
+
+
+        //END GAME Relic Progress (x5 Quests?)
+        relicProgress = 0;
+
+        guildEmblemDonated = false;
+        whisperingBarkDonated = false;
+        eldritchSilkDonated = false;
+        underbellyKeyDonated = false;
+        porcelainShardDonated = false;
+
         //add area object to area vector 
         areas.push_back(Area(0, "Guild Hall")); // 0 = Guild Hall
         areas[0].setAreaDescription("The Hall of Conquest, the most prominent Guild Hall in the region, a mere shell of it's former Glory. Now willing to offer jobs to even the craziest of Adventurers.");
@@ -52,7 +65,7 @@ Game::Game(int newDay, int newTime, bool newRunning, int newCurrentLocationIndex
         enemies.push_back(Enemy(10, 5, 100, 3)); // mini-boss
 }
 
-//setters
+//game.h setters
 void Game::startGame() { // start game method
     while(running == true) { //while program running
         displayMenu();
@@ -103,12 +116,17 @@ void Game::displayDash() { // displays dashboard ---- add additional functions s
     cout << "Location: " << areas[currentLocationIndex].getLocationName() << " (" << currentLocationIndex << ")" << endl; // player location //replacing with area call for location instead of player?
     cout << "Gold: " << player.getGold() << endl;
     cout << "Sanity: " << player.getSanity() << endl;
+    cout << "------------------------------" << endl;
     cout << "------------Actions-----------" << endl;
+    cout << "------------------------------" << endl;
     cout << "1. Travel" << endl;
     cout << "2. View Player Information" << endl;
     cout << "3. Current Area" << endl;
     cout << "4. View Nearby Enemies" << endl;
     cout << "5. End Game" << endl; // later save function for reaccess
+    //test quest prog
+    cout << "6. Donate Relic" << endl;
+    //end test quest prog
     cout << "Select an Option (1-5): " << endl;
 }
 
@@ -131,6 +149,11 @@ void Game::processDashChoice() { // process dash choices for player!
     else if(dashChoice == 5) {
         endGame(); // end game
     }
+    //test quest prog
+    else if(dashChoice == 6) {
+        donateRelic();
+    }
+    //end test quest prog
     else {
        cout << "Invalid Selection, please choose from the availble options." << endl; // default invalid selection option  
     }
@@ -163,7 +186,7 @@ void Game::travel() { // travel action to move location
         cout << "That destination does not exist." << endl;
     }
     
-} //bracket confusion oin fgoqewrngvqowE'AIRSFNGVqwao'srgvfnm !!!!!!!!!!!!!
+}
 
 void Game::displayCurrentArea() { // displays current active area
     cout << endl;
@@ -193,7 +216,7 @@ void Game::endGame() { // ends game
 }
 
 
-//getters
+//game.h getters
 int Game::getDay() { //get day
     return day;
 }
@@ -206,3 +229,195 @@ bool Game::getRunning() { //get running confirmation
     return running;
 }
 //include time logic for day and clock cycles
+//ENDGAME RELIC PROGRESS FUNCTIONS
+void Game::displayObjective() { //display objectives
+    //header
+    cout << "------------------------------" << endl;
+    cout << "-----------Objective----------" << endl;
+    cout << "------------------------------" << endl;
+    cout << "Progress: " << relicProgress << " / " << 5 << endl;
+    cout << endl;
+    // bool each relic print option for true/false
+    if(guildEmblemDonated) {
+        cout << "[Donated] Guild Emblem" << endl;
+    }
+    else{
+        cout << "[Needed] Guild Emblem" << endl;
+    }
+    if(whisperingBarkDonated == true) {
+        cout << "[Donated] Whispering Bark" << endl;
+    }
+    else{
+        cout << "[Needed] Whispering Bark" << endl;
+    }
+    if(eldritchSilkDonated) {
+        cout << "[Donated] Eldritch Silk" << endl;
+    }
+    else{
+        cout << "[Needed] Eldritch Silk" << endl;
+    }
+    if(underbellyKeyDonated) {
+        cout << "[Donated] Underbelly Key" << endl;
+    }
+    else{
+        cout << "[Needed] Underbelly Key" << endl;
+    }
+    if(porcelainShardDonated) {
+        cout << "[Donated] Porcelain Shard" << endl;
+    }
+    else{
+        cout << "[Needed] Porcelain Shard" << endl;
+    }
+}
+
+void Game::donateRelic() { //donate relic for objective progression
+    int donateChoice = 0; //donate relic 0
+
+    if(currentLocationIndex !=0) { //check location index, turn-ins must happen at starting guild hall
+        cout << "Relics can only be donated at the Guild Hall!" << endl;
+        return;
+    }
+
+    displayObjective(); // display objective
+    player.displayInventory(); // display player inventory
+
+    // output text
+    cout << endl;
+    cout << "Select a relic to donate: " << endl;
+    cout << "1. Guild Emblem" << endl;
+    cout << "2. Whispering Bark" << endl;
+    cout << "3. Eldritch Silk" << endl;
+    cout << "4. Underbelly Key" << endl;
+    cout << "5. Porcelain Shard" << endl;
+    cout << "6. Cancel" << endl;
+    cout << "Selection: ";
+    cin >> donateChoice; // player choice
+
+    //handle player donation input
+    if(donateChoice == 1){ // 1-5 for relic to turn in #1
+        if(guildEmblemDonated == true){ //if true do not recieve duplicate
+            cout << endl;
+            cout << "That Item has already been donated." << endl;
+        }
+        else if(player.hasItem("Guild Emblem")) { //if player has item
+            player.removeItem("Guild Emblem"); // remove item from player inventory via name
+            guildEmblemDonated = true; // set donation status to true
+            relicProgress++; // +1 to relic progression count
+
+            cout << "Guild Emblem donated!" << endl; // donate item
+            displayObjective(); // return user to objective screen
+            cout << endl;
+        }
+        else {
+            cout << "You have not accquired the Guild Emblem." << endl; // Do not have item
+        }
+
+        if (checkWin()){ // check for win condition
+        cout << "All five relics have been restored!" << endl;
+        }
+    }
+
+    else if(donateChoice == 2){ // 1-5 for relic to turn in #2
+        if(whisperingBarkDonated == true){ //if true do not recieve duplicate
+            cout << endl;
+            cout << "That Item has already been donated." << endl;
+        }
+        else if(player.hasItem("Whispering Bark")) { //if player has item
+            player.removeItem("Whispering Bark"); // remove item from player inventory via name
+            whisperingBarkDonated = true; // set donation status to true
+            relicProgress++; // +1 to relic progression count
+
+            cout << "Whispering Bark donated!" << endl; // donate item
+            displayObjective(); // return user to objective screen
+            cout << endl;
+        }
+        else {
+            cout << "You have not accquired Whispering Bark." << endl; // Do not have item
+        }
+
+        if (checkWin()){ // check for win condition
+        cout << "All five relics have been restored!" << endl;
+        }
+    }
+
+    else if(donateChoice == 3){ // 1-5 for relic to turn in #3
+        if(eldritchSilkDonated == true){ //if true do not recieve duplicate
+            cout << endl;
+            cout << "That Item has already been donated." << endl;
+        }
+        else if(player.hasItem("Eldritch Silk")) { //if player has item
+            player.removeItem("Eldritch Silk"); // remove item from player inventory via name
+            eldritchSilkDonated = true; // set donation status to true
+            relicProgress++; // +1 to relic progression count
+
+            cout << "Eldritch Silk donated!" << endl; // donate item
+            displayObjective(); // return user to objective screen
+            cout << endl;
+        }
+        else {
+            cout << "You have not accquired Eldritch Silk." << endl; // Do not have item
+        }
+
+        if (checkWin()){ // check for win condition
+        cout << "All five relics have been restored!" << endl;
+        }
+    }
+
+    else if(donateChoice == 4){ // 1-5 for relic to turn in #4
+        if(underbellyKeyDonated == true){ //if true do not recieve duplicate
+            cout << endl;
+            cout << "That Item has already been donated." << endl;
+        }
+        else if(player.hasItem("Underbelly Key")) { //if player has item
+            player.removeItem("Underbelly Key"); // remove item from player inventory via name
+            underbellyKeyDonated = true; // set donation status to true
+            relicProgress++; // +1 to relic progression count
+
+            cout << "Underbelly Key donated!" << endl; // donate item
+            displayObjective(); // return user to objective screen
+            cout << endl;
+        }
+        else {
+            cout << "You have not accquired the Underbelly Key." << endl; // Do not have item
+        }
+
+        if (checkWin()){ // check for win condition
+        cout << "All five relics have been restored!" << endl;
+        }
+    }
+
+    else if(donateChoice == 5){ // 1-5 for relic to turn in #5
+        if(porcelainShardDonated == true){ //if true do not recieve duplicate
+            cout << endl;
+            cout << "That Item has already been donated." << endl;
+        }
+        else if(player.hasItem("Porcelain Shard")) { //if player has item
+            player.removeItem("Porcelain Shard"); // remove item from player inventory via name
+            porcelainShardDonated = true; // set donation status to true
+            relicProgress++; // +1 to relic progression count
+
+            cout << "Porcelain Shard donated!" << endl; // donate item
+            displayObjective(); // return user to objective screen
+            cout << endl;
+
+            if (checkWin()){ // check for win condition
+            cout << "All five relics have been restored!" << endl;
+            }
+        }
+        else {
+            cout << "You have not accquired a Porcelain Shard." << endl; // Do not have item
+        }
+    }
+    
+    else if(donateChoice == 6) { // cancel operations
+        cout << "Donation cancelled." << endl;
+    }
+
+    else{ // invaild input
+        cout << "Invaild donation selection." << endl;
+    }
+}
+
+bool Game::checkWin() { // game win condition turn in all 5 required items
+    return relicProgress == 5;
+}

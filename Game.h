@@ -21,10 +21,19 @@ class Game {
         Player player; // create one object from player class - EXISTS
         vector<Area> areas; //create a vector of locations starting with one location - EXISTS
         vector<Enemy> enemies; // create a vector of enemies starting with 1 enemy - EXISTS
-        int currentLocationIndex;  // game index for area locations, have 2 similar variables in Area.h maybe problem??????
         int day;
         int time;
         bool running; //control variable for overall sample game loop
+        int currentLocationIndex;  // game index for area locations, have 2 similar variables in Area.h maybe problem??????
+
+        //END GAME Relic Progress (x5 Quests?)
+        int relicProgress;
+
+        bool guildEmblemDonated;
+        bool whisperingBarkDonated;
+        bool eldritchSilkDonated;
+        bool underbellyKeyDonated;
+        bool porcelainShardDonated;
 
     public:
 
@@ -43,9 +52,15 @@ class Game {
     void endGame(); // ends game
 
     //add combat systems here as well as additional game mechanics
+
     //getters
     int getDay(); //get day
     int getTime(); //get time
     bool getRunning(); //get running confirmation
+
+    //ENDGAME RELIC PROGRESS FUNCTIONS
+    void displayObjective();
+    void donateRelic();
+    bool checkWin();
 };
 #endif
