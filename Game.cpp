@@ -459,7 +459,7 @@ void Game::donateRelic() { //donate relic for objective progression
             cout << endl;
         }
         else {
-            cout << "You have not accquired the Guild Emblem." << endl; // Do not have item
+            cout << "You have not acquired the Guild Emblem." << endl; // Do not have item
         }
 
         if (checkWin()){ // check for win condition
@@ -483,7 +483,7 @@ void Game::donateRelic() { //donate relic for objective progression
             cout << endl;
         }
         else {
-            cout << "You have not accquired Whispering Bark." << endl; // Do not have item
+            cout << "You have not acquired Whispering Bark." << endl; // Do not have item
         }
 
         if (checkWin()){ // check for win condition
@@ -506,7 +506,7 @@ void Game::donateRelic() { //donate relic for objective progression
             cout << endl;
         }
         else {
-            cout << "You have not accquired Eldritch Silk." << endl; // Do not have item
+            cout << "You have not acquired Eldritch Silk." << endl; // Do not have item
         }
 
         if (checkWin()){ // check for win condition
@@ -529,7 +529,7 @@ void Game::donateRelic() { //donate relic for objective progression
             cout << endl;
         }
         else {
-            cout << "You have not accquired the Abyssal Coin." << endl; // Do not have item
+            cout << "You have not acquired the Abyssal Coin." << endl; // Do not have item
         }
 
         if (checkWin()){ // check for win condition
@@ -556,7 +556,7 @@ void Game::donateRelic() { //donate relic for objective progression
             }
         }
         else {
-            cout << "You have not accquired a Porcelain Shard." << endl; // Do not have item
+            cout << "You have not acquired a Porcelain Shard." << endl; // Do not have item
         }
     }
     
@@ -566,6 +566,9 @@ void Game::donateRelic() { //donate relic for objective progression
 
     else{ // invaild input
         cout << "Invaild donation selection." << endl;
+    }
+    if(checkWin()) { // check win condition for relic victory
+        displayVictoryEnding();
     }
 }
 
@@ -608,7 +611,7 @@ void Game::combat() { // combat function -- targets first available enemy ADD TA
                 int newEnemyHealth = enemies[enemyIndex].getHealth() - player.getAttack(); // COMBAT FORMULA
                 enemies[enemyIndex].setHealth(newEnemyHealth); // set new enemy health
 
-                if(enemies[enemyIndex].getHealth() <= 0) { // player defeats monster - VICTORY
+                if(enemies[enemyIndex].getHealth() <= 0) { // player defeats monster - SINGLE COMBAT VICTORY
                     enemies[enemyIndex].setHealth(0); // set enemy health
                     enemies[enemyIndex].setIsDefeated(true); // mob defeated
                     fighting = false; // stop fighting
@@ -622,12 +625,14 @@ void Game::combat() { // combat function -- targets first available enemy ADD TA
                     rollRelicDrop(enemyIndex); // RELIC DROP CHANCE
                     respawnClearedArea(currentLocationIndex); // respawn mobs function after combat will activate once all mobs in area are cleared!
 
+                    advanceTime(); //advance time after victory
+
                 }
                 else{ // enemy retaliates
                     int newPlayerHealth = player.getHealth() - enemies[enemyIndex].getDam(); // enemy attacks player health
                     player.setHealth(newPlayerHealth); // set new health
 
-                    if(player.getHealth() < 0) { // if player health reaches 0 - DEATH
+                    if(player.getHealth() <= 0) { // if player health reaches 0 - DEATH
                         player.setHealth(0); // set health to 0
                         cout << "Your health has reached 0 and you have fallen!" << endl; // Health Defeat
                         running = false; // END GAME - HEALTH LOSE SCENARIO
@@ -635,7 +640,7 @@ void Game::combat() { // combat function -- targets first available enemy ADD TA
                     int newPlayerSanity = player.getSanity() - enemies[enemyIndex].getSanityDam(); // enemy attacks player sanity
                     player.setSanity(newPlayerSanity); // set new sanity
 
-                    if(player.getSanity() < 0) { // if player sanity reaches 0 - DEATH
+                    if(player.getSanity() <= 0) { // if player sanity reaches 0 - DEATH
                         player.setSanity(0); // set sanity to 0
                         cout << "Your sanity has reached 0 and you have gone mad!" << endl; // Sanity Defeat
                         running = false; // END GAME - SANITY LOSE SCENARIO
@@ -645,7 +650,8 @@ void Game::combat() { // combat function -- targets first available enemy ADD TA
             else if(combatChoice == 2) { // PLAYER CHOOSES RETREAT
                 fighting = false; // stop fighting
                 enemies[enemyIndex].setHealth(100);
-                cout << "You retreat from combat." << endl;
+                cout << "You retreat from combat. Time passes." << endl;
+                advanceTime(); // advance time after retreating
             }
             else {
                 cout << "Invalid Selection" << endl; // invalid input
@@ -851,7 +857,7 @@ void Game::talkToCharacter() { // Talk to 3 MAJOR NPCS
             visitHarry();
         }
         else if(characterChoice == 3) {
-            displayDash();
+            return;
         }
         else {
             cout << "Invalid Selection." << endl;

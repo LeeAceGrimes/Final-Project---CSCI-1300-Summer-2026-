@@ -2,7 +2,7 @@
 #include "Character.h"
 
 #include <iostream> // probably don't need to keep redeclaring but is a habit
-#include <String>
+#include <string>
 #include <vector>
 
 using namespace std;
