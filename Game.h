@@ -50,6 +50,7 @@ class Game {
     void displayEnemies(); // displays enemies in area
     void travel(); // trave action to move location
     void endGame(); // ends game
+    void combat(); // combat function
 
     //add combat systems here as well as additional game mechanics
 

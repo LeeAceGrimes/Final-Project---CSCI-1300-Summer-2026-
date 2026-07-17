@@ -70,5 +70,11 @@ void Enemy::displayEnemy() { //similar to displayPlayerStats but for enemy
     cout << "Sanity Attack: " << getSanityDam() << endl;
     cout << "Loot: " << getLoot() << endl;
     cout << "Status: " << getIsDefeated() << endl;
+    if(getIsDefeated()) { // changed status of defeated to display text active/defeated instead of bool value
+        cout << "Status: Defeated" << endl; // bool 1
+    }
+    else { 
+        cout << "Status: Active" << endl; // bool 0
+    }
     cout << "Location: " << getEnemyLocationIndex() << endl; // enemy location added
 }

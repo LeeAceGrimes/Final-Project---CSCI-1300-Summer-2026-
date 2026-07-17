@@ -120,14 +120,14 @@ void Game::displayDash() { // displays dashboard ---- add additional functions s
     cout << "------------Actions-----------" << endl;
     cout << "------------------------------" << endl;
     cout << "1. Travel" << endl;
-    cout << "2. View Player Information" << endl;
-    cout << "3. Current Area" << endl;
-    cout << "4. View Nearby Enemies" << endl;
-    cout << "5. End Game" << endl; // later save function for reaccess
-    //test quest prog
+    cout << "2. Fight Nearby Enemies" << endl;
+    cout << "3. View Player Information" << endl;
+    cout << "4. Current Area" << endl;
+    cout << "5. View Nearby Enemies" << endl;
     cout << "6. Donate Relic" << endl;
-    //end test quest prog
-    cout << "Select an Option (1-5): " << endl;
+    cout << "7. End Game" << endl;
+    cout << "------------------------------" << endl;
+    cout << "Select an Option (1-7): " << endl;
 }
 
 void Game::processDashChoice() { // process dash choices for player!
@@ -138,22 +138,23 @@ void Game::processDashChoice() { // process dash choices for player!
         travel(); // travel option for player
     }
     else if(dashChoice == 2) {
-        player.displayPlayerStats(); // display player stats using display players stats player function
+        combat(); // combat
     }
     else if(dashChoice == 3) {
-        displayCurrentArea(); // double back on this
+        player.displayPlayerStats(); // display player stats using display players stats player function
     }
     else if(dashChoice == 4) {
-        displayEnemies(); // display enemies
+        displayCurrentArea(); // double back on this
     }
     else if(dashChoice == 5) {
+        displayEnemies(); // display enemies
+    }
+    else if(dashChoice == 6) {
+        donateRelic(); //donate relic
+    }
+    else if(dashChoice == 7) {
         endGame(); // end game
     }
-    //test quest prog
-    else if(dashChoice == 6) {
-        donateRelic();
-    }
-    //end test quest prog
     else {
        cout << "Invalid Selection, please choose from the availble options." << endl; // default invalid selection option  
     }
@@ -181,7 +182,6 @@ void Game::travel() { // travel action to move location
             cout << "That area is currently locked." << endl;
         }
     }
-
     else {
         cout << "That destination does not exist." << endl;
     }
@@ -229,6 +229,9 @@ bool Game::getRunning() { //get running confirmation
     return running;
 }
 //include time logic for day and clock cycles
+
+
+
 //ENDGAME RELIC PROGRESS FUNCTIONS
 void Game::displayObjective() { //display objectives
     //header
@@ -290,7 +293,8 @@ void Game::donateRelic() { //donate relic for objective progression
     cout << "4. Underbelly Key" << endl;
     cout << "5. Porcelain Shard" << endl;
     cout << "6. Cancel" << endl;
-    cout << "Selection: ";
+    cout << "--------------------------" << endl;
+    cout << "Select an option (1-6): ";
     cin >> donateChoice; // player choice
 
     //handle player donation input
@@ -420,4 +424,79 @@ void Game::donateRelic() { //donate relic for objective progression
 
 bool Game::checkWin() { // game win condition turn in all 5 required items
     return relicProgress == 5;
+}
+
+void Game::combat() { // combat function -- targets first available enemy ADD TARGET SELECTION LATER!!!!!!!!!!!!!!
+    int enemyIndex = -1; // default enemy index
+
+    for(size_t i = 0; i < enemies.size(); i++){ //scan enemies locates first enemy
+        if(enemies[i].getEnemyLocationIndex() == currentLocationIndex && enemies[i].getIsDefeated() == false) { // enemies at i location matches current plauyer location AND enemies defeated == false
+            enemyIndex = static_cast<int>(i); //static cast since size t i in scan loop
+            break; // break after saving first matching index
+        }
+    }
+    if(enemyIndex == -1){
+        cout << "There are no enemies to fight here." << endl;
+    }
+    else{
+        enemies[enemyIndex].displayEnemy(); // display enemies
+
+        //variables for combat user choice and fighting bool
+        bool fighting = true;
+        int combatChoice = 0;
+
+        while(fighting && player.getHealth() > 0 && player.getSanity() > 0 && enemies[enemyIndex].getHealth() > 0) {
+            //combat hud
+            cout << endl;
+            cout << "------------------------------" << endl;
+            cout << "-------------Combat-----------" << endl;
+            cout << "------------------------------" << endl;
+            cout << "Player Health: " << player.getHealth() << " HP" << endl;
+            cout << "Player Sanity: " << player.getSanity() << " SP" << endl;
+            cout << "Enemy Health: " << enemies[enemyIndex].getHealth() << " HP" << endl;
+            cout << "1. Attack" << endl;
+            cout << "2. Retreat" << endl;
+            cout << "------------------------------" << endl;
+            cout << "Select an Option (1-2): " << endl;
+            //user input stored in combat choice
+            cin >> combatChoice;
+
+            if(combatChoice == 1) { // PLAYER CHOOSES COMBAT
+                int newEnemyHealth = enemies[enemyIndex].getHealth() - player.getAttack(); // enemy health - player attack saved to new variable newenemyhealth
+                enemies[enemyIndex].setHealth(newEnemyHealth); // set new enemy health
+
+                if(enemies[enemyIndex].getHealth() <= 0) { //player defeats monster
+                    enemies[enemyIndex].setHealth(0);
+                    enemies[enemyIndex].setIsDefeated(true); // mob defeated
+                    fighting = false; // stop fighting
+
+                    cout << enemies[enemyIndex].getName() << " defeated!" << endl; // enemy defeated output
+                }
+                else{ // enemy retaliates
+                    int newPlayerHealth = player.getHealth() - enemies[enemyIndex].getDam(); // enemy attacks player health
+                    player.setHealth(newPlayerHealth); // set new health
+
+                    if(player.getHealth() < 0) { // if player health reaches 0 
+                        player.setHealth(0); // set health to 0
+                        cout << "Your health has reached 0 and you have fallen!" << endl; // Health Defeat
+                    }
+                    int newPlayerSanity = player.getSanity() - enemies[enemyIndex].getSanityDam(); // enemy attacks player sanity
+                    player.setSanity(newPlayerSanity); // set new sanity
+
+                    if(player.getSanity() < 0) { // if player sanity reaches 0
+                        player.setSanity(0); // set sanity to 0
+                        cout << "Your sanity has reached 0 and you have gone mad!" << endl; // Sanity Defeat
+                    }
+                }
+            }
+            else if(combatChoice == 2) { // PLAYER CHOOSES RETREAT
+                fighting = false; // stop fighting
+                enemies[enemyIndex].setHealth(100);
+                cout << "You retreat from combat." << endl;
+            }
+            else {
+                cout << "Invalid Selection" << endl;
+            }
+        }
+    }
 }
