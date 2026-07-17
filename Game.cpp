@@ -24,18 +24,20 @@ Game::Game(int newDay, int newTime, bool newRunning, int newCurrentLocationIndex
         running = newRunning; //set running
         currentLocationIndex = newCurrentLocationIndex; //set local location index
 
-        //test quest prog
-        //end test quest prog
-
+        maxDays = 7; //7 or 8
+        actionsPerDay = 5; // 7 X 5 give 35 actions //5
 
         //END GAME Relic Progress (x5 Quests?)
         relicProgress = 0;
+        guildEmblemAwarded = false;
 
         guildEmblemDonated = false;
         whisperingBarkDonated = false;
         eldritchSilkDonated = false;
-        underbellyKeyDonated = false;
+        abyssalCoinDonated = false; // changed name
         porcelainShardDonated = false;
+
+        darkInfluence = 0;
 
         //add area object to area vector 
         areas.push_back(Area(0, "Guild Hall")); // 0 = Guild Hall
@@ -48,11 +50,11 @@ Game::Game(int newDay, int newTime, bool newRunning, int newCurrentLocationIndex
 
         areas.push_back(Area(2, "Underbelly")); // 2 = underbelly
         areas[2].setAreaDescription("The deep Underbelly of the local town. Recent monster attacks have driven most criminal organizations underground. What can be found?");
-        areas[2].setAreaUnlocked(true); //set to unlocked for demo purposes
+        areas[2].setAreaUnlocked(false); //set to unlocked for demo purposes
 
         areas.push_back(Area(3, "Porcelain Fortress")); // 3 = fortress
         areas[3].setAreaDescription("A magnificent fortress that once radiated glory across the region. Since then the shine has become quite dull, what happened at the Fortress?");
-        areas[3].setAreaUnlocked(true); // set to unlocked for 
+        areas[3].setAreaUnlocked(false); // set to unlocked for 
 
         //add enemy object to enemy vector
         enemies.push_back(Enemy(3, 2, 8, 1));
@@ -112,23 +114,27 @@ void Game::displayDash() { // displays dashboard ---- add additional functions s
     cout << "------------------------------" << endl;
     cout << "          Dashboard           " << endl;
     cout << "------------------------------" << endl;
-    cout << "Day: " << getDay() << endl; //current day
-    cout << "Time: " << getTime() << endl; //current time
+    cout << "Day: " << day << " / " << maxDays << endl; //current day
+    cout << "Dark Influence: " << darkInfluence << endl;
+    cout << "Actions: " << time << " / " << actionsPerDay << endl; //current time --changed to actions to account for time
     cout << "Location: " << areas[currentLocationIndex].getLocationName() << " (" << currentLocationIndex << ")" << endl; // player location //replacing with area call for location instead of player?
     cout << "Gold: " << player.getGold() << endl;
+    cout << "Health: " << player.getHealth() << endl;
     cout << "Sanity: " << player.getSanity() << endl;
     cout << "------------------------------" << endl;
     cout << "------------Actions-----------" << endl;
     cout << "------------------------------" << endl;
     cout << "1. Travel" << endl;
-    cout << "2. Fight Nearby Enemies" << endl;
-    cout << "3. View Player Information" << endl;
-    cout << "4. Current Area" << endl;
-    cout << "5. View Nearby Enemies" << endl;
-    cout << "6. Donate Relic" << endl;
-    cout << "7. End Game" << endl;
+    cout << "2. Talk to Character" << endl;
+    cout << "3. Fight Nearby Enemies" << endl;
+    cout << "4. Rest (Heal)" << endl;
+    cout << "5. View Player Information" << endl;
+    cout << "6. Current Area" << endl;
+    cout << "7. View Nearby Enemies" << endl;
+    cout << "8. Donate Relic" << endl;
+    cout << "9. End Game" << endl;
     cout << "------------------------------" << endl;
-    cout << "Select an Option (1-7): " << endl;
+    cout << "Select an Option (1-9): " << endl;
 }
 
 void Game::processDashChoice() { // process dash choices for player!
@@ -139,21 +145,27 @@ void Game::processDashChoice() { // process dash choices for player!
         travel(); // travel option for player
     }
     else if(dashChoice == 2) {
-        combat(); // combat
+        talkToCharacter();
     }
     else if(dashChoice == 3) {
-        player.displayPlayerStats(); // display player stats using display players stats player function
+        combat(); // combat
     }
     else if(dashChoice == 4) {
-        displayCurrentArea(); // double back on this
+        restAtGuildHall(); // rest function to heal player
     }
     else if(dashChoice == 5) {
-        displayEnemies(); // display enemies
+        player.displayPlayerStats(); // display player stats using display players stats player function
     }
     else if(dashChoice == 6) {
-        donateRelic(); //donate relic
+        displayCurrentArea(); // double back on this
     }
     else if(dashChoice == 7) {
+        displayEnemies(); // display enemies
+    }
+    else if(dashChoice == 8) {
+        donateRelic(); //donate relic
+    }
+    else if(dashChoice == 9) {
         endGame(); // end game
     }
     else {
@@ -163,10 +175,16 @@ void Game::processDashChoice() { // process dash choices for player!
 
 void Game::travel() { // travel action to move location
     int newLocation = 0;
-    for(size_t i = 0; i < areas.size(); i++) { // reformat for better visual?????????? //didn't intitialize i
+    // travel header
+    cout << endl;
+    cout << "------------------------------" << endl;
+    cout << "-------------Travel-----------" << endl;
+    cout << "------------------------------" << endl;
+
+    for(size_t i = 0; i < areas.size(); i++) { //scan area vector
         cout << areas[i].getLocationIndex() << ". " << areas[i].getLocationName() << " " << endl; // No i + 1 needed since using 0, probably the best decision made so far
     }
-
+    cout << endl;
     cout << "Select Travel Destination: ";
     cin >> newLocation;
     
@@ -178,6 +196,7 @@ void Game::travel() { // travel action to move location
             player.moveLocation(newLocation);
 
             cout << "Now arriving at " << areas[currentLocationIndex].getLocationName() << " (" << currentLocationIndex << ")" << endl; // print location name from areas vector object currentLocation index, followed by index
+            advanceTime();
         }
         else {
             cout << "That area is currently locked." << endl;
@@ -186,7 +205,6 @@ void Game::travel() { // travel action to move location
     else {
         cout << "That destination does not exist." << endl;
     }
-    
 }
 
 void Game::displayCurrentArea() { // displays current active area
@@ -265,11 +283,11 @@ void Game::displayObjective() { //display objectives
     else{
         cout << "[Needed] [Eldritch Silk]" << endl;
     }
-    if(underbellyKeyDonated) {
-        cout << "[Donated] [Underbelly Key]" << endl;
+    if(abyssalCoinDonated) {
+        cout << "[Donated] [Abyssal Coin]" << endl;
     }
     else{
-        cout << "[Needed] [Underbelly Key]" << endl;
+        cout << "[Needed] [Abyssal Coin]" << endl;
     }
     if(porcelainShardDonated) {
         cout << "[Donated] [Porcelain Shard]" << endl;
@@ -296,7 +314,7 @@ void Game::donateRelic() { //donate relic for objective progression
     cout << "1. [Guild Emblem]" << endl;
     cout << "2. [Whispering Bark]" << endl;
     cout << "3. [Eldritch Silk]" << endl;
-    cout << "4. [Underbelly Key]" << endl;
+    cout << "4. [Abyssal Coin]" << endl;
     cout << "5. [Porcelain Shard]" << endl;
     cout << "6. Cancel" << endl;
     cout << "--------------------------" << endl;
@@ -374,21 +392,21 @@ void Game::donateRelic() { //donate relic for objective progression
     }
 
     else if(donateChoice == 4){ // 1-5 for relic to turn in #4
-        if(underbellyKeyDonated == true){ //if true do not recieve duplicate
+        if(abyssalCoinDonated == true){ //if true do not recieve duplicate
             cout << endl;
             cout << "That Item has already been donated." << endl;
         }
-        else if(player.hasItem("Underbelly Key")) { //if player has item
-            player.removeItem("Underbelly Key"); // remove item from player inventory via name
-            underbellyKeyDonated = true; // set donation status to true
+        else if(player.hasItem("Abyssal Coin")) { //if player has item
+            player.removeItem("Abyssal Coin"); // remove item from player inventory via name
+            abyssalCoinDonated = true; // set donation status to true
             relicProgress++; // +1 to relic progression count
 
-            cout << "[Underbelly Key] donated!" << endl; // donate item
+            cout << "[Abyssal Coin] donated!" << endl; // donate item
             displayObjective(); // return user to objective screen
             cout << endl;
         }
         else {
-            cout << "You have not accquired the Underbelly Key." << endl; // Do not have item
+            cout << "You have not accquired the Abyssal Coin." << endl; // Do not have item
         }
 
         if (checkWin()){ // check for win condition
@@ -544,9 +562,9 @@ void Game:: rollRelicDrop(int enemyIndex) { // roll drop chance, using random fu
     }
 
     if(enemyLocation == 2) { // LOCATION 2 RELIC -- UNDERBELLY
-        if(underbellyKeyDonated == false && !player.hasItem("Underbelly Key")) { // Player has not donated AND player dows not have relic
-            player.addItem(Item("Underbelly Key", "Relic", 100, true)); // create Relic
-            cout << "The Enemy has dropped [Underbelly Key]!" << endl;
+        if(abyssalCoinDonated == false && !player.hasItem("Abyssal Coin")) { // Player has not donated AND player dows not have relic
+            player.addItem(Item("Abyssal Coin", "Relic", 100, true)); // create Relic
+            cout << "The Enemy has dropped [Abyssal Coin]!" << endl;
         }
         else {
             cout << "No additional Relic required from The Underbelly." << endl;
@@ -577,16 +595,288 @@ void Game::respawnClearedArea(int locationIndex) {
         }
     }
 
-    if(areaHasEnemies == true && activeEnemyFound == false){
-        for(size_t i = 0; i < enemies.size(); i++) {
-            if(enemies[i].getEnemyLocationIndex() == locationIndex) {
-                enemies[i].setIsDefeated(false);
-                enemies[i].setHealth(100);
-
+    if(areaHasEnemies == true && activeEnemyFound == false){ // Area has enemies and active enemyfound false
+        for(size_t i = 0; i < enemies.size(); i++) { //scan vector
+            if(enemies[i].getEnemyLocationIndex() == locationIndex) { // if  enemy belongs in this location
+                enemies[i].setIsDefeated(false); // reset
+                enemies[i].setHealth(100); // reset
             }
         }
-        cout << "The area has been cleared, but new enemies continue to appear!" << endl;
+        cout << "The area has been cleared, but new enemies continue to appear!" << endl; // Reset Confirmation message after defeating last area mob
+    }
+}
+
+void Game:: restAtGuildHall() { // Heal function for player at guild hall
+    if(currentLocationIndex != 0) { // Must rest at Guild Hall index 0
+        cout << "Rest can only be found at the Guild Hall, Adventurer!" << endl;
+        return;
+    }
+    if(player.getHealth() == 100 && player.getSanity() == 130) { // player health and sanity full do nothing
+        cout << "Player is in good spirits!" << endl;
+        return;
+    }
+    else { // otherwise reset player health and sanity
+        player.setHealth(100); 
+        player.setSanity(130);
+
+        cout << endl;
+        cout << "You rest at the Guild Hall." << endl;
+        cout << "Health restored to " << player.getHealth() << "." << endl;
+        cout << "Sanity restored to " << player.getSanity() << "." << endl;
+        advanceTime(); // advance time
+    }
+}
+
+//TIME FUNCTIONS
+void Game::advanceTime() { // advance time function
+    time++;
+
+    if (time > actionsPerDay) {
+        day++;
+        time = 1;
+
+        if(day <= maxDays) {
+            cout << "A new day has begun." << endl;
+        }
+    }
+    if(checkTimeLoss()) { // check time loss -- END GAME TIME LIMIT
+        cout << "Time has expired before the Relics were retrieved." << endl;
+        cout << "Game Over - Try Again?" << endl;
+        running = false;
+    }
+}
+
+bool Game::checkTimeLoss() { // check time loss scenario
+    return day > maxDays;
+}
+
+
+//NPC FUNCTIONS
+void Game::talkToCharacter() { // Talk to 3 MAJOR NPCS
+    if(currentLocationIndex == 0) { // at location 0 talk to GuildMaster Elara at Guild HAll -- NPC GUILDMASTER ELARA DIALOGUE
+        cout << endl;
+        cout << "Guildmaster Elara stands beside the ruined altar." << endl;
+
+        if(guildEmblemAwarded == false && guildEmblemDonated == false && player.hasItem("Guild Emblem") == false) {
+            cout << endl;
+            cout << "\"Recover the five relics in 7 days or else the Hall will not stand. Good luck Adventurer.\"" << endl; // more flavor text to come
+
+            player.addItem(
+                Item("Guild Emblem", "Relic", 100, true) // create guild emblem object for player 
+            );
+
+            guildEmblemAwarded = true; // guildemblem awarded true 1/5 quest progress
+
+            cout << endl;
+            cout << "Guild Emblem added to inventory." << endl;
+            advanceTime(); // advance time as penalty for recieving quest objective
+        }
+        else {
+            cout << endl;
+            cout << "\"The remaining relics are still scattered beyond these walls. I'd start with the Whispering Forest first, only 7 days adventurer.\"" << endl; // more flavor text to come
+        }
+    }
+    else if(currentLocationIndex == 1) { // at location 1 talk to Scout Rowan at Whispering Forest -- NPC SCOUT ROWAN DIALOGUE
+        cout << endl;
+        cout << "A primitive figure is made out in the distance. The figure approaches making a hawk like noise. The signature greeting of one Scout Rowan" << endl;
+
+        if(areas[2].getAreaUnlocked() == false) {
+            cout << endl;
+            cout << "\"Heard you were the new Adventurer in the Guild, you here to save us? Well you'll be needing this, Godspeed.\"" << endl;
+            cout << endl;
+
+            areas[2].setAreaUnlocked(true); // unlock location 2
+
+            cout << endl;
+            cout << "Obtained [Underbelly] granting access to The Underbelly." << endl;
+            advanceTime();
+        }
+        else {
+            cout << endl;
+            cout << "\"How goes delving into the Underbelly? Find anything useful?\"" << endl;
+        }
     }
 
+    else if(currentLocationIndex == 2) { // at location 2 talk to Warden Celeste at Underbelly -- NPC WARDEN CELESTE DIALOGUE
+        int characterChoice = 0;
 
+        cout << "Characters Nearby: " << endl;
+        cout << "1. Warden Celeste" << endl;
+        cout << "2. Shady Harry" << endl;
+        cout << "3. Return" << endl;
+        cout << "Selection (1-3): ";
+        cin >> characterChoice;
+
+        if(characterChoice == 1) {
+                cout << endl;
+                cout << "Standing Guard at an entrance that begins to look much brighter than the rest of the surrounding area stands Warden Celeste." << endl;
+
+            if(areas[3].getAreaUnlocked() == false) {
+                cout << endl;
+                cout << "\"If I hadn't seen your Guild crest I would've mistaken you for a petty bandit. If you are able to stand and fight the Porcelain Fortress needs every hand!\"" << endl;
+
+                areas[3].setAreaUnlocked(true); // unlock location 3
+
+                cout << endl;
+                cout << "Obtained [Porcelain Map] granting access to The Porcelain Fortress." << endl;
+                advanceTime();
+            }
+            else {
+                cout << endl;
+                cout << "\"Fight Adventurer, fight like our lives depend on it.\"" << endl;
+            }
+        }
+        else if(characterChoice == 2) {
+            visitHarry();
+        }
+        else if(characterChoice == 3) {
+            displayDash();
+        }
+        else {
+            cout << "Invalid Selection." << endl;
+        }
+    }
+    else {
+        cout << endl;
+        cout << "There is nobody available to speak with here yet." << endl;
+    }
 }
+// NPC FUNCTION FOR HARRY AND SHORTCUT SHOP -- RECURSION
+void Game::visitHarry() {
+    int harryChoice = 0;
+    int relicPrice = 40;
+
+    cout << endl;
+    cout << "Harry: Why risk your life when I can provide what you need?" << endl;
+    cout << "1. [Guild Emblem] - 40 Gold" << endl;
+    cout << "2. [Whispering Bark] - 40 Gold" << endl;
+    cout << "3. [Eldritch Silk] - 40 Gold" << endl;
+    cout << "4. [Abyssal Coin] - 40 Gold" << endl;
+    cout << "5. [Porcelain Shard] - 40 Gold" << endl;
+    cout << "6. Leave" << endl;
+    cout << "Select an Option (1-6): " << endl;
+    cin >> harryChoice;
+
+    if(harryChoice == 1) {
+        if(guildEmblemDonated == true) {
+            cout << "Already turned in [Guild Emblem]." << endl;
+        }
+        else if(player.hasItem("Guild Emblem")) {
+            cout << "You already have this item." << endl;
+        }
+        else if(player.getGold() < relicPrice) {
+            cout << "Not enough Gold to Purchase." << endl;
+        }
+        else {
+            player.setGold(player.getGold() - relicPrice);
+            player.addItem(Item("Guild Emblem", "Relic", 100, true));
+            darkInfluence++;
+
+            cout << "Harry hands you the [Guild Enmblem]." << endl;
+            cout << "Dark Influence increased to " << darkInfluence << "." << endl;
+
+            advanceTime();
+        }
+    }
+    else if(harryChoice == 2) {
+        if(whisperingBarkDonated == true) {
+            cout << "Already turned in [Whispering Bark]." << endl;
+            visitHarry();
+            return;
+        }
+        else if(player.hasItem("Whispering Bark")) {
+            cout << "You already have this item." << endl;
+            visitHarry();
+            return;
+        }
+        else if(player.getGold() < relicPrice) {
+            cout << "Not enough Gold to Purchase." << endl;
+            visitHarry();
+        }
+        else {
+            player.setGold(player.getGold() - relicPrice);
+            player.addItem(Item("Whispering Bark", "Relic", 100, true));
+            darkInfluence++;
+
+            cout << "Harry hands you the [Whispering Bark]." << endl;
+            cout << "Dark Influence increased to " << darkInfluence << "." << endl;
+
+            advanceTime();
+        }
+    }
+    else if(harryChoice == 3) {
+        if(eldritchSilkDonated == true) {
+            cout << "Already turned in [Eldritch Silk]." << endl;
+        }
+        else if(player.hasItem("Eldritch Silk")) {
+            cout << "You already have this item." << endl;
+        }
+        else if(player.getGold() < relicPrice) {
+            cout << "Not enough Gold to Purchase." << endl;
+        }
+        else {
+            player.setGold(player.getGold() - relicPrice);
+            player.addItem(Item("Eldritch Silk", "Relic", 100, true));
+            darkInfluence++;
+
+            cout << "Harry hands you the [Eldritch Silk]." << endl;
+            cout << "Dark Influence increased to " << darkInfluence << "." << endl;
+
+            advanceTime();
+        }
+    }
+    else if(harryChoice == 4) {
+        if(abyssalCoinDonated == true) {
+            cout << "Already turned in [Abyssal Coin]." << endl;
+        }
+        else if(player.hasItem("Abyssal Coin")) {
+            cout << "You already have this item." << endl;
+        }
+        else if(player.getGold() < relicPrice) {
+            cout << "Not enough Gold to Purchase." << endl;
+        }
+        else {
+            player.setGold(player.getGold() - relicPrice);
+            player.addItem(Item("Abyssal Coin", "Relic", 100, true));
+            darkInfluence++;
+
+            cout << "Harry hands you the [Abyssal Coin]." << endl;
+            cout << "Dark Influence increased to " << darkInfluence << "." << endl;
+
+            advanceTime();
+        }
+    }
+    else if(harryChoice == 5) {
+        if(porcelainShardDonated == true) {
+            cout << "Already turned in [Porcelain Shard]." << endl;
+        }
+        else if(player.hasItem("Porcelain Shard")) {
+            cout << "You already have this item." << endl;
+        }
+        else if(player.getGold() < relicPrice) {
+            cout << "Not enough Gold to Purchase." << endl;
+        }
+        else {
+            player.setGold(player.getGold() - relicPrice);
+            player.addItem(Item("Porcelain Shard", "Relic", 100, true));
+            darkInfluence++;
+
+            cout << "Harry hands you the [Porcelain Shard]." << endl;
+            cout << "Dark Influence increased to " << darkInfluence << "." << endl;
+
+            advanceTime();
+        }
+    }
+    else if(harryChoice == 6) {
+        cout << "Harry: Return when desperation outweighs caution." << endl;
+        return;
+    }
+    else {
+        cout << "Invalid shop selection." << endl;
+    }
+    if(running) {
+        visitHarry(); // recursion to shop
+    }
+    return;   
+}
+

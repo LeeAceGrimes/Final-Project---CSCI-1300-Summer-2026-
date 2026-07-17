@@ -9,7 +9,7 @@ using namespace std;
 
 Enemy::Enemy(int d, int sD, int L, int locationIndex) // contructor similar to player but with enemy variables
     : Character("Vile Spider", "An invasive species of spider native to this region, however they have since grown quite large and increased in aggression lately.")
-{   //default name and description for starting enemy
+{   //default name and description for starting enemy !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     damageStat = d;
     sanityDamStat = sD;
     loot = L;

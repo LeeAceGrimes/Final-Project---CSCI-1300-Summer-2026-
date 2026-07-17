@@ -21,8 +21,12 @@ class Game {
         Player player; // create one object from player class - EXISTS
         vector<Area> areas; //create a vector of locations starting with one location - EXISTS
         vector<Enemy> enemies; // create a vector of enemies starting with 1 enemy - EXISTS
+        //time variables
         int day;
         int time;
+        int maxDays;
+        int actionsPerDay;
+
         bool running; //control variable for overall sample game loop
         int currentLocationIndex;  // game index for area locations, have 2 similar variables in Area.h maybe problem??????
 
@@ -32,8 +36,10 @@ class Game {
         bool guildEmblemDonated;
         bool whisperingBarkDonated;
         bool eldritchSilkDonated;
-        bool underbellyKeyDonated;
+        bool abyssalCoinDonated;
         bool porcelainShardDonated;
+
+        int darkInfluence;
 
     public:
 
@@ -67,5 +73,16 @@ class Game {
     //relic - combat
     void rollRelicDrop(int enemyIndex); // roll chance for relic drop based on enemyIndex
     void respawnClearedArea(int LocationIndex); // respawn enemies in area once cleared
+    void restAtGuildHall(); // Restore Health at Guild hall
+
+    //time functions
+    void advanceTime();
+    bool checkTimeLoss();
+
+    //QUEST NPC
+    bool guildEmblemAwarded;
+    void talkToCharacter();
+
+    void visitHarry();
 };
 #endif
