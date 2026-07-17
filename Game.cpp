@@ -57,15 +57,15 @@ Game::Game(int newDay, int newTime, bool newRunning, int newCurrentLocationIndex
         areas[3].setAreaUnlocked(false); // set to unlocked for 
 
         //add enemy object to enemy vector
-        enemies.push_back(Enemy(3, 2, 8, 1));
-        enemies.push_back(Enemy(3, 2, 8, 1));
-        enemies.push_back(Enemy(3, 2, 8, 1)); // x3 simple mobs
+        enemies.push_back(Enemy("Vile Spider", "An invasive spider swollen with corruption", 3, 2, 8, 1));
+        enemies.push_back(Enemy("Vile Spider", "An invasive spider swollen with corruption", 3, 2, 8, 1));
+        enemies.push_back(Enemy("Vile Spider", "An invasive spider swollen with corruption", 3, 2, 8, 1)); // x3 simple mobs
 
-        enemies.push_back(Enemy(5, 2, 15, 2)); 
-        enemies.push_back(Enemy(5, 2, 15, 2));
-        enemies.push_back(Enemy(5, 2, 15, 2)); // x3 normal mobs
+        enemies.push_back(Enemy("Abyssal Crawler", "A stealthy scavenger mishapened by the Underbelly", 5, 2, 15, 2)); 
+        enemies.push_back(Enemy("Abyssal Crawler", "A stealthy scavenger mishapened by the Underbelly", 5, 2, 15, 2));
+        enemies.push_back(Enemy("Abyssal Crawler", "A stealthy scavenger mishapened by the Underbelly", 5, 2, 15, 2)); // x3 normal mobs
 
-        enemies.push_back(Enemy(10, 5, 100, 3)); // mini-boss
+        enemies.push_back(Enemy("Porcelain Warden", "A fractured guardian animated within white armor.", 9, 5, 100, 3)); // mini-boss
 }
 
 //game.h setters
@@ -121,6 +121,8 @@ void Game::displayDash() { // displays dashboard ---- add additional functions s
     cout << "Gold: " << player.getGold() << endl;
     cout << "Health: " << player.getHealth() << endl;
     cout << "Sanity: " << player.getSanity() << endl;
+    cout << "Inventory Items: " << player.getInventorySize() << endl;
+    cout << "Relic Progress: " << relicProgress << " / " << 5 << endl;
     cout << "------------------------------" << endl;
     cout << "------------Actions-----------" << endl;
     cout << "------------------------------" << endl;
@@ -157,6 +159,7 @@ void Game::processDashChoice() { // process dash choices for player!
         player.displayPlayerStats(); // display player stats using display players stats player function
     }
     else if(dashChoice == 6) {
+        displayMap();
         displayCurrentArea(); // double back on this
     }
     else if(dashChoice == 7) {
@@ -172,7 +175,6 @@ void Game::processDashChoice() { // process dash choices for player!
        cout << "Invalid Selection, please choose from the availble options." << endl; // default invalid selection option  
     }
 }
-
 void Game::travel() { // travel action to move location
     int newLocation = 0;
     // travel header
@@ -182,7 +184,7 @@ void Game::travel() { // travel action to move location
     cout << "------------------------------" << endl;
 
     for(size_t i = 0; i < areas.size(); i++) { //scan area vector
-        cout << areas[i].getLocationIndex() << ". " << areas[i].getLocationName() << " " << endl; // No i + 1 needed since using 0, probably the best decision made so far
+        cout << areas[i].getLocationIndex() << ". " << areas[i].getLocationName() << " " << endl; // No i + 1 needed since using 0
     }
     cout << endl;
     cout << "Select Travel Destination: ";
@@ -206,6 +208,88 @@ void Game::travel() { // travel action to move location
         cout << "That destination does not exist." << endl;
     }
 }
+//DISPLAY FUNCTIONS
+void Game::displayMap() {
+
+    string guildMarker = " ";
+    string forestMarker = " ";
+    string fortressMarker = " ";
+    string underbellyMarker = " ";
+
+    if (currentLocationIndex == 0)
+    {
+        guildMarker = "*";
+    }
+    else if (currentLocationIndex == 1)
+    {
+        forestMarker = "*";
+    }
+    else if (currentLocationIndex == 2)
+    {
+        underbellyMarker = "*";
+    }
+    else if (currentLocationIndex == 3)
+    {
+        fortressMarker = "*";
+    }
+
+    //ASCII MAP FORMATTING
+    cout << endl;
+    cout << "==================== Realm Map ====================" << endl;
+    cout << "                         [N]" << endl;
+    cout << "              .-----------." << endl;
+    cout << "             /  , ~ ~ ~ ,  \\" << endl;
+    cout << "            (  ~ ~" << forestMarker << "WF ~ ~  )" << endl;
+    cout << "             \\  ' ~ ~ ~ '  /" << endl;
+    cout << "              '-----+-----'" << endl;
+    cout << "                    |" << endl;
+    cout << "      .-----.       |       .-----." << endl;
+    cout << "     /       \\      |      /       \\" << endl;
+    cout << "    (  " << guildMarker << "GH    +-----+-----+  " << fortressMarker << "PF    )" << endl;
+    cout << "     \\       /             \\       /" << endl;
+    cout << "      '-----'               '-----'" << endl;
+    cout << "                    |" << endl;
+    cout << "                    |" << endl;
+    cout << "              .-----+-----." << endl;
+    cout << "             /  ~ ~ ~ ~ ~  \\" << endl;
+    cout << "            (  ~ ~" << underbellyMarker << "UB ~ ~   )" << endl;
+    cout << "             \\  ~ ~ ~ ~ ~  /" << endl;
+    cout << "              '-----------'" << endl;
+    cout << "                    [S]" << endl;
+
+    cout << endl;
+    cout << "* = Current Location" << endl;
+    cout << endl;
+
+    cout << "Legend:" << endl;
+    cout << "GH : Guild Hall - A fortified, isolated bastion " << "of cold stone." << endl;
+
+    cout << "WF : Whispering Forest - A choking canopy of " << "shifting, quiet needles." << endl;
+
+    cout << "PF : Porcelain Fortress - An elegant, towering " << "monument of fragile white bone." << endl;
+
+    cout << "UB : The Underbelly - A deeply sunken abyss, " << "pooling with stagnant corruption." << endl;
+
+    cout << endl;
+    cout << "Underbelly: "; 
+    if (areas[2].getAreaUnlocked()) { // Underbelly Unlocked/Locked Status
+        cout << "Unlocked" << endl;
+    }
+    else {
+        cout << "Locked" << endl;
+    }
+
+    cout << "Porcelain Fortress: "; // Porcelain Fortress unlocked/locked status
+    if (areas[3].getAreaUnlocked()) {
+        cout << "Unlocked" << endl;
+    }
+    else {
+        cout << "Locked" << endl;
+    }
+
+    cout << "===================================================" << endl;
+}
+
 
 void Game::displayCurrentArea() { // displays current active area
     cout << endl;
@@ -252,9 +336,47 @@ int Game::getTime() { //get time
 bool Game::getRunning() { //get running confirmation
     return running;
 }
-//include time logic for day and clock cycles
 
+//WIN CONDITION - VICTORY SPLIT
+bool Game::checkWin() { // game win condition turn in all 5 required items
+    return relicProgress == 5;
+}
 
+void Game::displayVictoryEnding() { // Victory condition based on shortcut usage
+    cout << endl;
+    cout << "==========================================" << endl;
+    cout << "          THE HALL IS RESTORED" << endl;
+    cout << "==========================================" << endl;
+
+    if (darkInfluence == 0) { // 0 dark influence BEST ENDING
+        cout << "The five relics blaze with an untainted light." << endl;
+        cout << "The Hall of Conquest stands restored through " << endl;
+        cout << "your courage alone." << endl;
+        cout << "Harry's influence finds no hold within its walls." << endl;
+        cout << endl;
+        cout << "Ending: The Honorable Restoration" << endl;
+    }
+    else if (darkInfluence <= 2) { //2 or less NORMAL ENDING
+        cout << "The Hall stands once more, but shadows move beneath" << endl;
+        cout << "its restored stones." << endl;
+        cout << "Harry kept his promises, though the price was greater" << endl;
+        cout << "than gold." << endl;
+        cout << endl;
+        cout << "Ending: The Tainted Restoration" << endl;
+    }
+    else { // More than 2 shortcut uses BAD ENDING
+        cout << "The final relic locks into place, and the Hall rises." << endl;
+        cout << "Yet its banners now bear a mark that belongs to Harry." << endl;
+        cout << "The Hall was saved, but its future is no longer yours." << endl;
+        cout << endl;
+        cout << "Ending: Harry's Ascendance" << endl;
+    }
+
+    cout << "Final Dark Influence: " << darkInfluence << endl;
+    cout << "==========================================" << endl;
+
+    running = false;
+}
 
 //ENDGAME RELIC PROGRESS FUNCTIONS
 void Game::displayObjective() { //display objectives
@@ -341,6 +463,7 @@ void Game::donateRelic() { //donate relic for objective progression
         }
 
         if (checkWin()){ // check for win condition
+        cout << "VICTORY!" << endl;
         cout << "All five relics have been restored!" << endl;
         }
     }
@@ -446,10 +569,6 @@ void Game::donateRelic() { //donate relic for objective progression
     }
 }
 
-bool Game::checkWin() { // game win condition turn in all 5 required items
-    return relicProgress == 5;
-}
-
 void Game::combat() { // combat function -- targets first available enemy ADD TARGET SELECTION LATER!!!!!!!!!!!!!!
     int enemyIndex = -1; // default enemy index
 
@@ -511,6 +630,7 @@ void Game::combat() { // combat function -- targets first available enemy ADD TA
                     if(player.getHealth() < 0) { // if player health reaches 0 - DEATH
                         player.setHealth(0); // set health to 0
                         cout << "Your health has reached 0 and you have fallen!" << endl; // Health Defeat
+                        running = false; // END GAME - HEALTH LOSE SCENARIO
                     }
                     int newPlayerSanity = player.getSanity() - enemies[enemyIndex].getSanityDam(); // enemy attacks player sanity
                     player.setSanity(newPlayerSanity); // set new sanity
@@ -518,6 +638,7 @@ void Game::combat() { // combat function -- targets first available enemy ADD TA
                     if(player.getSanity() < 0) { // if player sanity reaches 0 - DEATH
                         player.setSanity(0); // set sanity to 0
                         cout << "Your sanity has reached 0 and you have gone mad!" << endl; // Sanity Defeat
+                        running = false; // END GAME - SANITY LOSE SCENARIO
                     }
                 }
             }
@@ -642,7 +763,7 @@ void Game::advanceTime() { // advance time function
     if(checkTimeLoss()) { // check time loss -- END GAME TIME LIMIT
         cout << "Time has expired before the Relics were retrieved." << endl;
         cout << "Game Over - Try Again?" << endl;
-        running = false;
+        running = false; // END GAME - TIME LOSE SCENARIO
     }
 }
 

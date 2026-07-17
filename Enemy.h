@@ -22,7 +22,7 @@ class Enemy : public Character {
 
     public:
         //constructor
-        Enemy(int d, int sD, int L, int locationIndex);
+        Enemy(string newName, string newInfo, int d, int sD, int L, int locationIndex); // removed constructor default add name and info
 
         //setters
         void setDam(int newDamStat); // set damage
