@@ -69,6 +69,8 @@ void Player::displayPlayerStats() { //display stats player inherits all getter/s
     cout << "Gold: " << getGold() << endl;
     cout << "Sanity: " << getSanity() << endl;
     cout << "Current Location: " << getCL() << endl; //replace with area control of position??????
+
+    displayInventory(); // call inventory function to display inventory items
 }
 
 //player inventory getters

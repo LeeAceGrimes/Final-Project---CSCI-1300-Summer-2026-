@@ -63,5 +63,9 @@ class Game {
     void displayObjective();
     void donateRelic();
     bool checkWin();
+
+    //relic - combat
+    void rollRelicDrop(int enemyIndex); // roll chance for relic drop based on enemyIndex
+    void respawnClearedArea(int LocationIndex); // respawn enemies in area once cleared
 };
 #endif

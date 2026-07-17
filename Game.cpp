@@ -9,6 +9,7 @@
 #include <iostream> // included libraries agin just in case, already included in game.h file
 #include <string>
 #include <vector>
+#include <random>
 
 using namespace std;
 
@@ -197,6 +198,11 @@ void Game::displayCurrentArea() { // displays current active area
 
 void Game::displayEnemies() { // displays total enemies in area
     int enemyCount = 0; //total nearby enemy count
+    cout << endl;
+    cout << "------------------------------" << endl; // enemies header
+    cout << "------------Enemies-----------" << endl;
+    cout << "------------------------------" << endl;
+
     for(size_t i = 0; i < enemies.size(); i++) { //scan array
         if(enemies[i].getEnemyLocationIndex() == currentLocationIndex) { //if enemy area matches current location
             enemyCount++; // add enemy to count
@@ -242,34 +248,34 @@ void Game::displayObjective() { //display objectives
     cout << endl;
     // bool each relic print option for true/false
     if(guildEmblemDonated) {
-        cout << "[Donated] Guild Emblem" << endl;
+        cout << "[Donated] [Guild Emblem]" << endl;
     }
     else{
-        cout << "[Needed] Guild Emblem" << endl;
+        cout << "[Needed] [Guild Emblem]" << endl;
     }
     if(whisperingBarkDonated == true) {
-        cout << "[Donated] Whispering Bark" << endl;
+        cout << "[Donated] [Whispering Bark]" << endl;
     }
     else{
-        cout << "[Needed] Whispering Bark" << endl;
+        cout << "[Needed] [Whispering Bark]" << endl;
     }
     if(eldritchSilkDonated) {
-        cout << "[Donated] Eldritch Silk" << endl;
+        cout << "[Donated] [Eldritch Silk]" << endl;
     }
     else{
-        cout << "[Needed] Eldritch Silk" << endl;
+        cout << "[Needed] [Eldritch Silk]" << endl;
     }
     if(underbellyKeyDonated) {
-        cout << "[Donated] Underbelly Key" << endl;
+        cout << "[Donated] [Underbelly Key]" << endl;
     }
     else{
-        cout << "[Needed] Underbelly Key" << endl;
+        cout << "[Needed] [Underbelly Key]" << endl;
     }
     if(porcelainShardDonated) {
-        cout << "[Donated] Porcelain Shard" << endl;
+        cout << "[Donated] [Porcelain Shard]" << endl;
     }
     else{
-        cout << "[Needed] Porcelain Shard" << endl;
+        cout << "[Needed] [Porcelain Shard]" << endl;
     }
 }
 
@@ -287,11 +293,11 @@ void Game::donateRelic() { //donate relic for objective progression
     // output text
     cout << endl;
     cout << "Select a relic to donate: " << endl;
-    cout << "1. Guild Emblem" << endl;
-    cout << "2. Whispering Bark" << endl;
-    cout << "3. Eldritch Silk" << endl;
-    cout << "4. Underbelly Key" << endl;
-    cout << "5. Porcelain Shard" << endl;
+    cout << "1. [Guild Emblem]" << endl;
+    cout << "2. [Whispering Bark]" << endl;
+    cout << "3. [Eldritch Silk]" << endl;
+    cout << "4. [Underbelly Key]" << endl;
+    cout << "5. [Porcelain Shard]" << endl;
     cout << "6. Cancel" << endl;
     cout << "--------------------------" << endl;
     cout << "Select an option (1-6): ";
@@ -308,7 +314,7 @@ void Game::donateRelic() { //donate relic for objective progression
             guildEmblemDonated = true; // set donation status to true
             relicProgress++; // +1 to relic progression count
 
-            cout << "Guild Emblem donated!" << endl; // donate item
+            cout << "[Guild Emblem] donated!" << endl; // donate item
             displayObjective(); // return user to objective screen
             cout << endl;
         }
@@ -331,7 +337,7 @@ void Game::donateRelic() { //donate relic for objective progression
             whisperingBarkDonated = true; // set donation status to true
             relicProgress++; // +1 to relic progression count
 
-            cout << "Whispering Bark donated!" << endl; // donate item
+            cout << "[Whispering Bark] donated!" << endl; // donate item
             displayObjective(); // return user to objective screen
             cout << endl;
         }
@@ -354,7 +360,7 @@ void Game::donateRelic() { //donate relic for objective progression
             eldritchSilkDonated = true; // set donation status to true
             relicProgress++; // +1 to relic progression count
 
-            cout << "Eldritch Silk donated!" << endl; // donate item
+            cout << "[Eldritch Silk] donated!" << endl; // donate item
             displayObjective(); // return user to objective screen
             cout << endl;
         }
@@ -377,7 +383,7 @@ void Game::donateRelic() { //donate relic for objective progression
             underbellyKeyDonated = true; // set donation status to true
             relicProgress++; // +1 to relic progression count
 
-            cout << "Underbelly Key donated!" << endl; // donate item
+            cout << "[Underbelly Key] donated!" << endl; // donate item
             displayObjective(); // return user to objective screen
             cout << endl;
         }
@@ -400,7 +406,7 @@ void Game::donateRelic() { //donate relic for objective progression
             porcelainShardDonated = true; // set donation status to true
             relicProgress++; // +1 to relic progression count
 
-            cout << "Porcelain Shard donated!" << endl; // donate item
+            cout << "[Porcelain Shard] donated!" << endl; // donate item
             displayObjective(); // return user to objective screen
             cout << endl;
 
@@ -462,28 +468,36 @@ void Game::combat() { // combat function -- targets first available enemy ADD TA
             cin >> combatChoice;
 
             if(combatChoice == 1) { // PLAYER CHOOSES COMBAT
-                int newEnemyHealth = enemies[enemyIndex].getHealth() - player.getAttack(); // enemy health - player attack saved to new variable newenemyhealth
+                int newEnemyHealth = enemies[enemyIndex].getHealth() - player.getAttack(); // COMBAT FORMULA
                 enemies[enemyIndex].setHealth(newEnemyHealth); // set new enemy health
 
-                if(enemies[enemyIndex].getHealth() <= 0) { //player defeats monster
-                    enemies[enemyIndex].setHealth(0);
+                if(enemies[enemyIndex].getHealth() <= 0) { // player defeats monster - VICTORY
+                    enemies[enemyIndex].setHealth(0); // set enemy health
                     enemies[enemyIndex].setIsDefeated(true); // mob defeated
                     fighting = false; // stop fighting
 
                     cout << enemies[enemyIndex].getName() << " defeated!" << endl; // enemy defeated output
+
+                    int newPlayerGold = player.getGold() + enemies[enemyIndex].getLoot(); // Loot drop add monster gold to player gold
+                    player.setGold(newPlayerGold); // set player gold
+                    cout << "You collected " << enemies[enemyIndex].getLoot() << " gold." << endl; // output for looted gold
+
+                    rollRelicDrop(enemyIndex); // RELIC DROP CHANCE
+                    respawnClearedArea(currentLocationIndex); // respawn mobs function after combat will activate once all mobs in area are cleared!
+
                 }
                 else{ // enemy retaliates
                     int newPlayerHealth = player.getHealth() - enemies[enemyIndex].getDam(); // enemy attacks player health
                     player.setHealth(newPlayerHealth); // set new health
 
-                    if(player.getHealth() < 0) { // if player health reaches 0 
+                    if(player.getHealth() < 0) { // if player health reaches 0 - DEATH
                         player.setHealth(0); // set health to 0
                         cout << "Your health has reached 0 and you have fallen!" << endl; // Health Defeat
                     }
                     int newPlayerSanity = player.getSanity() - enemies[enemyIndex].getSanityDam(); // enemy attacks player sanity
                     player.setSanity(newPlayerSanity); // set new sanity
 
-                    if(player.getSanity() < 0) { // if player sanity reaches 0
+                    if(player.getSanity() < 0) { // if player sanity reaches 0 - DEATH
                         player.setSanity(0); // set sanity to 0
                         cout << "Your sanity has reached 0 and you have gone mad!" << endl; // Sanity Defeat
                     }
@@ -495,8 +509,84 @@ void Game::combat() { // combat function -- targets first available enemy ADD TA
                 cout << "You retreat from combat." << endl;
             }
             else {
-                cout << "Invalid Selection" << endl;
+                cout << "Invalid Selection" << endl; // invalid input
             }
         }
     }
+}
+
+void Game:: rollRelicDrop(int enemyIndex) { // roll drop chance, using random function. For duplicate drop protection manually code each item to a drop location
+    random_device randomDevice;
+    mt19937 generator(randomDevice());
+    uniform_int_distribution<int> distribution(1, 100); // generate number from 1-100
+
+    int dropRoll = distribution(generator);
+    cout << "Loot Crit: " << dropRoll << endl;
+
+    if(dropRoll > 70) { // if number is 71-100
+        cout << "The Enemy dropped no Relic" << endl; // no relic
+        return; // end function
+    }
+    int enemyLocation = enemies[enemyIndex].getEnemyLocationIndex(); // get enemy location
+
+    if(enemyLocation == 1) { // LOCATION 1 RELIC -- WHISPERING FOREST
+        if(whisperingBarkDonated == false && !player.hasItem("Whispering Bark")) { // Player has not donated AND player dows not have relic
+            player.addItem(Item("Whispering Bark", "Relic", 100, true));
+            cout << "The Enemy has dropped [Whispering Bark]!" << endl;
+        }
+        else if(eldritchSilkDonated == false && !player.hasItem("Eldritch Silk")) { // Player has not donated AND player dows not have relic
+            player.addItem(Item("Eldritch Silk", "Relic", 100, true));
+            cout << "The Enemy has dropped [Eldritch Silk]!" << endl;
+        }
+        else {
+            cout << "No additional Relic required from Whispering Forest." << endl;
+        }
+    }
+
+    if(enemyLocation == 2) { // LOCATION 2 RELIC -- UNDERBELLY
+        if(underbellyKeyDonated == false && !player.hasItem("Underbelly Key")) { // Player has not donated AND player dows not have relic
+            player.addItem(Item("Underbelly Key", "Relic", 100, true)); // create Relic
+            cout << "The Enemy has dropped [Underbelly Key]!" << endl;
+        }
+        else {
+            cout << "No additional Relic required from The Underbelly." << endl;
+        }
+    }
+    if(enemyLocation == 3) { // LOCATION 3 RELIC -- PORCELAIN FORTRESS
+        if(porcelainShardDonated == false && !player.hasItem("Porcelain Shard")) { // Player has not donated AND player dows not have relic
+            player.addItem(Item("Porcelain Shard", "Relic", 100, true)); // create relic
+            cout << "The Enemy has dropped [Porcelain Shard]!" << endl;
+        }
+        else {
+            cout << "No additional Relic required from Porcelain Fortress." << endl;
+        }
+    }   
+}
+
+void Game::respawnClearedArea(int locationIndex) {
+    bool areaHasEnemies = false; // confirm area has enemies set to false
+    bool activeEnemyFound = false;
+
+    for(size_t i = 0; i < enemies.size(); i++) {
+        if(enemies[i].getEnemyLocationIndex() == locationIndex) { // check where enemy belongs to area checking
+            areaHasEnemies = true; // set area enemies to true
+
+            if(enemies[i].getIsDefeated() == false) { 
+                activeEnemyFound = true;
+            }
+        }
+    }
+
+    if(areaHasEnemies == true && activeEnemyFound == false){
+        for(size_t i = 0; i < enemies.size(); i++) {
+            if(enemies[i].getEnemyLocationIndex() == locationIndex) {
+                enemies[i].setIsDefeated(false);
+                enemies[i].setHealth(100);
+
+            }
+        }
+        cout << "The area has been cleared, but new enemies continue to appear!" << endl;
+    }
+
+
 }
